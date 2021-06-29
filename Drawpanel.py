@@ -1,6 +1,9 @@
 from tkinter.filedialog import askopenfilename
 from tkinter import *
 
+import myParser
+
+Files = [0, 0]
 
 def draw(my_canvas):
     my_canvas.create_line(0, 0, 300, 200, fill='red')
@@ -11,11 +14,23 @@ def draw(my_canvas):
     my_canvas.create_text(150, 100, text='Attribute')
 
 
-def open_file():
+def openCorrectFile():
     file = askopenfilename(title='Choose GraphML', filetype=[("GraphML File", "*.graphml")])
     if file:
-        read_graphML = open(file, 'r')
-        out = read_graphML.read()
+        Files.insert(0, file)
+
+
+def openStudentFile():
+    file = askopenfilename(title='Choose GraphML', filetype=[("GraphML File", "*.graphml")])
+    if file:
+        Files.insert(1, file)
+
+
+def correct():
+    print(Files[0])
+    print(Files[1])
+    if Files[0] != 0:
+        myParser.correct(Files[1], Files[0])
 
 
 class Example(Frame):
@@ -42,14 +57,14 @@ class Example(Frame):
                        padx=5, sticky=E + W + S + N)
         draw(my_canvas)
 
-        abtn = Button(self, text="Musterlösung", command=lambda: open_file())
+        abtn = Button(self, text="model solution", command=lambda: openCorrectFile())
         abtn.grid(row=1, column=3)
 
-        cbtn = Button(self, text="Close")
+        cbtn = Button(self, text="model student", command=lambda: openStudentFile())
         cbtn.grid(row=2, column=3, pady=4)
 
-        hbtn = Button(self, text="HELP")
-        hbtn.grid(row=5, column=0, padx=5)
+        hbtn = Button(self, text="Correct", command=lambda: correct())
+        hbtn.grid(row=3, column=3)
 
         obtn = Button(self, text="OK")
         obtn.grid(row=5, column=3)

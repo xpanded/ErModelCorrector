@@ -18,10 +18,12 @@ def getCorrectAttributes(nodename, correct):
 
 
 def controllIfMissing(nodeAttributes, correctAttributes):
+    if(type(nodeAttributes) is None) or (type(correctAttributes) is None):
+        return
     if (len(nodeAttributes) > len(correctAttributes)):
         print('too many attributes')
 
-    if (len(nodeAttributes) < len(correctAttributes)):
+    elif (len(nodeAttributes) < len(correctAttributes)):
         print('attributes missing')
 
     found = False
