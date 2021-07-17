@@ -40,6 +40,13 @@ class Node:
     def getAttributes(self):
         return self.attributes
 
+    def getCoordinates(self):
+        return self.x, self.y
+
+    def setCoordinates(self, x, y):
+        self.x = x
+        self.y = y
+
 
 class Relation:
 
@@ -55,6 +62,13 @@ class Relation:
     def getId(self):
         return self.nid
 
+    def getCoordinates(self):
+        return self.x, self.y
+
+    def setCoordinates(self, x, y):
+        self.x = x
+        self.y = y
+
 
 class Attribute:
     def __init__(self, nid, label, primary, x, y):
@@ -69,6 +83,13 @@ class Attribute:
 
     def getLabel(self):
         return self.label
+
+    def getCoordinates(self):
+        return self.x, self.y
+
+    def setCoordinates(self, x, y):
+        self.x = x
+        self.y = y
 
 
 def findInList(nid, list):
@@ -132,7 +153,7 @@ def createNode(nx, list):
         return
     if ('attribute' in nodetype):
         primary = False
-        if ('underlinedText="true"' in nlabels):
+        if ('''underlinedText="true"''' in nlabels[0]):
             primary = True
         createAttribute(nid, nlabel, primary, list, x, y)
         return

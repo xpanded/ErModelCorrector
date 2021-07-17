@@ -7,8 +7,8 @@ def checkAttributes(graph, correct):
             nodeAttributes = i.getAttributes()
             nodename = i.getLabel()
             correctAttributes = getCorrectAttributes(nodename, correct)
-
-            controllIfMissing(nodeAttributes, correctAttributes)
+            if (correctAttributes is not None):
+                controllIfMissing(nodeAttributes, correctAttributes)
 
 
 def getCorrectAttributes(nodename, correct):
@@ -18,7 +18,7 @@ def getCorrectAttributes(nodename, correct):
 
 
 def controllIfMissing(nodeAttributes, correctAttributes):
-    if(type(nodeAttributes) is None) or (type(correctAttributes) is None):
+    if (type(nodeAttributes) is None) or (type(correctAttributes) is None):
         return
     if (len(nodeAttributes) > len(correctAttributes)):
         print('too many attributes')
@@ -33,7 +33,20 @@ def controllIfMissing(nodeAttributes, correctAttributes):
                 found = True
                 print('found', c.getLabel())
         if (found == False):
-            found = False
             print('attribute missing ', c.getLabel())
         found = False
 
+
+def checkClasses(graph, correct):
+    found = False
+    for c in correct:
+        for i in graph:
+            if (type(i) == model.Node and type(c) == model.Node):
+                if (i.getLabel() == c.getLabel()):
+                    found = True
+                    print('class found', c.getLabel())
+        if (found == False and type(c) == model.Node ):
+            print('class missing ', c.getLabel())
+        if (found == False and type(c) == model.Relation):
+            print('relationship missing ', c.getLabel())
+        found = False

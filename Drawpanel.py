@@ -2,10 +2,21 @@ from tkinter.filedialog import askopenfilename
 from tkinter import *
 
 import myParser
+import Drawer
 
 Files = [0, 0]
 
-def draw(my_canvas):
+def drawAttribute(my_canvas, attribute):
+    x, y = attribute.getCoordinates()
+    my_canvas.create_oval(x, y, x+50, y+50, fill='cyan')
+
+def drawH(my_canvas, alElements):
+    minX, minY, maxX, maxY = myParser.getMinMax(alElements)
+    myParser.normaliseCoordinates(alElements, minX, minY, maxX, maxY)
+    Drawer.drawER(my_canvas, alElements)
+    print('break')
+
+def draw(my_canvas, alElements, cElements):
     my_canvas.create_line(0, 0, 300, 200, fill='red')
     my_canvas.create_line(150, 0, 150, 200, fill='red')
 
@@ -26,11 +37,12 @@ def openStudentFile():
         Files.insert(1, file)
 
 
-def correct():
+def correct(my_canvas):
     print(Files[0])
     print(Files[1])
     if Files[0] != 0:
-        myParser.correct(Files[1], Files[0])
+        alElements, cElements = myParser.correct(Files[1], Files[0])
+        drawH(my_canvas, alElements)
 
 
 class Example(Frame):
@@ -55,7 +67,7 @@ class Example(Frame):
         my_canvas = Canvas(self, width=1600, height=700, bg="white")
         my_canvas.grid(row=1, column=0, columnspan=2, rowspan=4,
                        padx=5, sticky=E + W + S + N)
-        draw(my_canvas)
+        # draw(my_canvas)
 
         abtn = Button(self, text="model solution", command=lambda: openCorrectFile())
         abtn.grid(row=1, column=3)
@@ -63,7 +75,7 @@ class Example(Frame):
         cbtn = Button(self, text="model student", command=lambda: openStudentFile())
         cbtn.grid(row=2, column=3, pady=4)
 
-        hbtn = Button(self, text="Correct", command=lambda: correct())
+        hbtn = Button(self, text="Correct", command=lambda: correct(my_canvas))
         hbtn.grid(row=3, column=3)
 
         obtn = Button(self, text="OK")
