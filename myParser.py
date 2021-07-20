@@ -44,6 +44,7 @@ def correct(xmlfile, correctfile):
 
     Corrector.checkAttributes(alElements, cElements)
     Corrector.checkClasses(alElements, cElements)
+    Corrector.checkRelationCardinality(alElements, cElements)
 
     return alElements, cElements
 

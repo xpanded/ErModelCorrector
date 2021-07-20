@@ -1,10 +1,10 @@
 class Edge:
-    label = ''
 
     def __init__(self, lid, source, target):
         self.lid = lid
         self.source = source
         self.target = target
+        self.label = ''
 
     def setLabel(self, label):
         self.label = label
@@ -16,7 +16,7 @@ class Edge:
         return self.source
 
     def getTarget(self):
-        return self.getTarget()
+        return self.target
 
 
 class Node:

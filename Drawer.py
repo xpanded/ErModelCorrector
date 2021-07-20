@@ -27,11 +27,20 @@ def drawRelation(my_canvas, attribute):
     my_canvas.create_text(x + 12, y + 8, text=text, anchor='nw')
 
 
+def drawEdge(my_canvas, edge):
+    x1, y1 = edge.getTarget().getCoordinates()
+    x2, y2 = edge.getSource().getCoordinates()
+
+    my_canvas.create_line(x1+20, y1+20, x2+20, y2+20, fill='black')
+
+
 def drawER(my_canvas, alElements):
-    for i in alElements:
+    for i in reversed(alElements):
         if (type(i) == model.Node):
             drawNode(my_canvas, i)
         elif (type(i) == model.Attribute):
             drawAttribute(my_canvas, i)
         elif (type(i) == model.Relation):
             drawRelation(my_canvas, i)
+        elif (type(i) == model.Edge):
+            drawEdge(my_canvas, i)
