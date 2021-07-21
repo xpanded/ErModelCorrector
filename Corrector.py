@@ -64,21 +64,29 @@ def checkRelationCardinality(graph, correct):
                 c1Cardinality = getCardinalityFromEdge(correct, c1, c)
                 c2Cardinality = getCardinalityFromEdge(correct, c2, c)
                 g1, g2 = getNodesFromRelation(graph, g)
-                if (g1.getLabel() == c1.getLabel()):
+                if (g1.getLabel() == c1.getLabel()) and (g2.getLabel() == c2.getLabel()):
                     g1Cardinality = getCardinalityFromEdge(graph, g1, g)
                     g2Cardinality = getCardinalityFromEdge(graph, g2, g)
-                if (g2.getLabel() == c1.getLabel()):
+                    checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality)
+                if (g2.getLabel() == c1.getLabel()) and (g1.getLabel() == c2.getLabel()):
                     g1Cardinality = getCardinalityFromEdge(graph, g2, g)
                     g2Cardinality = getCardinalityFromEdge(graph, g1, g)
-                if (g1Cardinality == c1Cardinality and g2Cardinality == c2Cardinality):
-                    print('right cardinality for ', c.getLabel())
-                    continue
-                if (g1Cardinality != c1Cardinality):
-                    print('wrong cardinality for {0} is {1} instead of {2}'.format(c.getLabel(), g1Cardinality,
-                                                                                   c1Cardinality))
-                if (g2Cardinality != c2Cardinality):
-                    print('wrong cardinality for {0} is {1} instead of {2}'.format(c.getLabel(), g2Cardinality,
-                                                                                   c2Cardinality))
+                    checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality)
+
+
+def checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality):
+    if (g1Cardinality == c1Cardinality and g2Cardinality == c2Cardinality):
+        print('right cardinalities for ', c.getLabel())
+    if (g1Cardinality != c1Cardinality):
+        print('wrong cardinality for {0} related to {1} is {2} instead of {3}'.format(c.getLabel(),
+                                                                                      g1.getLabel(),
+                                                                                      g1Cardinality,
+                                                                                      c1Cardinality))
+    if (g2Cardinality != c2Cardinality):
+        print('wrong cardinality for {0} related to {1} is {2} instead of {3}'.format(c.getLabel(),
+                                                                                      g2.getLabel(),
+                                                                                      g2Cardinality,
+                                                                                      c2Cardinality))
 
 
 def getNodesFromRelation(graph, relation):
@@ -91,7 +99,7 @@ def getNodesFromRelation(graph, relation):
         n1 = e1.getSource()
     if (type(e2.getTarget()) == model.Node):
         n2 = e2.getTarget()
-    if (type(e1.getSource()) == model.Node):
+    if (type(e2.getSource()) == model.Node):
         n2 = e2.getSource()
     return n1, n2
 
@@ -100,7 +108,8 @@ def getEdgesFromRelation(graph, relation):
     alresult = []
     for i in graph:
         if (type(i) == model.Edge):
-            if (i.getTarget() == relation or i.getSource() == relation):
+            if (i.getTarget() == relation and type(i.getSource() == model.Node)) or (
+                    i.getSource() == relation and type(i.getTarget() == model.Node)):
                 alresult.append(i)
     if (alresult[0] is not None and alresult[1] is not None):
         return alresult[0], alresult[1]
@@ -110,5 +119,5 @@ def getCardinalityFromEdge(graph, n1, n2):
     for i in graph:
         if (type(i) == model.Edge):
             if (i.getTarget() == n1 and i.getSource() == n2) or (
-                    i.getTarget() == n2 and i.getSource() == n2):
+                    i.getTarget() == n2 and i.getSource() == n1):
                 return i.getLabel()

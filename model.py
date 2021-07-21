@@ -108,8 +108,12 @@ def createEdge(x, list):
     starget = mains[5]
     starget = starget[8:-2]
 
-    slabels = res[6].split('>')
-    slabel = slabels[1]
+    if ('key=' in res[2]):
+        slabels = res[7].split('>')
+        slabel = slabels[1]
+    else:
+        slabels = res[6].split('>')
+        slabel = slabels[1]
     slabel = slabel.split('<')[0]
 
     source = findInList(ssource, list)
