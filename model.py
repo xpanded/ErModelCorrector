@@ -5,6 +5,7 @@ class Edge:
         self.source = source
         self.target = target
         self.label = ''
+        self.color = 'black'
 
     def setLabel(self, label):
         self.label = label
@@ -17,6 +18,9 @@ class Edge:
 
     def getTarget(self):
         return self.target
+
+    def getColor(self):
+        return self.color
 
 
 class Node:
@@ -91,6 +95,9 @@ class Attribute:
         self.x = x
         self.y = y
 
+    def getPrimary(self):
+        return self.primary
+
 
 def findInList(nid, list):
     for i in list:
@@ -107,13 +114,13 @@ def createEdge(x, list):
     ssource = ssource[8:-1]
     starget = mains[5]
     starget = starget[8:-2]
+    i = 2
 
-    if ('key=' in res[2]):
-        slabels = res[7].split('>')
-        slabel = slabels[1]
-    else:
-        slabels = res[6].split('>')
-        slabel = slabels[1]
+    while ('key=' in res[i]):
+        i=i+1
+
+    slabels = res[i+4].split('>')
+    slabel = slabels[1]
     slabel = slabel.split('<')[0]
 
     source = findInList(ssource, list)

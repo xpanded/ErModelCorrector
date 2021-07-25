@@ -4,7 +4,7 @@ import model
 import Corrector
 
 
-def correct(xmlfile, correctfile):
+def correct(xmlfile, correctfile, out):
     ns = {"y": "https://www.yworks.com/xml/graphml", "gr": "http://graphml.graphdrawing.org/xmlns"}
     ET.register_namespace('gr', 'http://graphml.graphdrawing.org/xmlns')
     ET.register_namespace('y', 'https://www.yworks.com/xml/graphml')
@@ -39,12 +39,11 @@ def correct(xmlfile, correctfile):
             model.createNode(y, alElements)
 
     model.printall(alElements)
-    print('ctree \n')
     model.printall(cElements)
 
-    Corrector.checkAttributes(alElements, cElements)
-    Corrector.checkClasses(alElements, cElements)
-    Corrector.checkRelationCardinality(alElements, cElements)
+    Corrector.checkAttributes(alElements, cElements,out)
+    Corrector.checkClasses(alElements, cElements,out)
+    Corrector.checkRelationCardinality(alElements, cElements,out)
 
     return alElements, cElements
 

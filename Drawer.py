@@ -24,14 +24,14 @@ def drawRelation(my_canvas, attribute):
     my_canvas.create_line(x + 60, y + 30, x, y + 15, fill='red')
     my_canvas.create_line(x, y + 15, x + 60, y, fill='red')
 
-    my_canvas.create_text(x + 12, y + 8, text=text, anchor='nw')
+    my_canvas.create_text(x + 13, y + 8, text=text, anchor='nw')
 
 
 def drawEdge(my_canvas, edge):
     x1, y1 = edge.getTarget().getCoordinates()
     x2, y2 = edge.getSource().getCoordinates()
 
-    my_canvas.create_line(x1+20, y1+20, x2+20, y2+20, fill='black')
+    my_canvas.create_line(x1+20, y1+20, x2+20, y2+20, fill=edge.getColor())
 
 
 def drawER(my_canvas, alElements):

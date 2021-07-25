@@ -5,24 +5,14 @@ import myParser
 import Drawer
 
 Files = [0, 0]
+writer = []
 
-def drawAttribute(my_canvas, attribute):
-    x, y = attribute.getCoordinates()
-    my_canvas.create_oval(x, y, x+50, y+50, fill='cyan')
 
 def drawH(my_canvas, alElements):
+    my_canvas.delete("all")
     minX, minY, maxX, maxY = myParser.getMinMax(alElements)
     myParser.normaliseCoordinates(alElements, minX, minY, maxX, maxY)
     Drawer.drawER(my_canvas, alElements)
-    print('break')
-
-def draw(my_canvas, alElements, cElements):
-    my_canvas.create_line(0, 0, 300, 200, fill='red')
-    my_canvas.create_line(150, 0, 150, 200, fill='red')
-
-    my_canvas.create_rectangle(0, 0, 80, 50, fill='pink')
-    my_canvas.create_oval(50, 150, 250, 50, fill='cyan')
-    my_canvas.create_text(150, 100, text='Attribute')
 
 
 def openCorrectFile():
@@ -37,15 +27,15 @@ def openStudentFile():
         Files.insert(1, file)
 
 
-def correct(my_canvas):
+def correct(my_canvas,t):
     print(Files[0])
     print(Files[1])
     if Files[0] != 0:
-        alElements, cElements = myParser.correct(Files[1], Files[0])
+        alElements, cElements = myParser.correct(Files[1], Files[0], writer)
         drawH(my_canvas, alElements)
+    t.insert(1.0, writer)
 
-
-class Example(Frame):
+class Main(Frame):
 
     def __init__(self):
         super().__init__()
@@ -67,7 +57,6 @@ class Example(Frame):
         my_canvas = Canvas(self, width=1600, height=700, bg="white")
         my_canvas.grid(row=1, column=0, columnspan=2, rowspan=4,
                        padx=5, sticky=E + W + S + N)
-        # draw(my_canvas)
 
         abtn = Button(self, text="model solution", command=lambda: openCorrectFile())
         abtn.grid(row=1, column=3)
@@ -75,17 +64,21 @@ class Example(Frame):
         cbtn = Button(self, text="model student", command=lambda: openStudentFile())
         cbtn.grid(row=2, column=3, pady=4)
 
-        hbtn = Button(self, text="Correct", command=lambda: correct(my_canvas))
+        t = Text(self, height=6, width=186)
+        t.grid(row=5, column=0)
+        s = Scrollbar(self)
+        t.config(yscrollcommand=s.set)
+
+        hbtn = Button(self, text="Correct", command=lambda: correct(my_canvas,t))
         hbtn.grid(row=3, column=3)
 
-        obtn = Button(self, text="OK")
-        obtn.grid(row=5, column=3)
+
 
 
 def main():
     root = Tk()
     root.geometry("1600x840+300+300")
-    app = Example()
+    app = Main()
     root.mainloop()
 
 

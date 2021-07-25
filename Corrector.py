@@ -1,14 +1,14 @@
 import model
 
 
-def checkAttributes(graph, correct):
+def checkAttributes(graph, correct, out):
     for i in graph:
         if (type(i) == model.Node):
             nodeAttributes = i.getAttributes()
             nodename = i.getLabel()
             correctAttributes = getCorrectAttributes(nodename, correct)
             if (correctAttributes is not None):
-                controllIfMissing(nodeAttributes, correctAttributes)
+                controllIfMissing(nodeAttributes, correctAttributes, nodename, out)
 
 
 def getCorrectAttributes(nodename, correct):
@@ -17,46 +17,55 @@ def getCorrectAttributes(nodename, correct):
             return y.getAttributes()
 
 
-def controllIfMissing(nodeAttributes, correctAttributes):
+def controllIfMissing(nodeAttributes, correctAttributes, nodename, out):
     if (type(nodeAttributes) is None) or (type(correctAttributes) is None):
         return
     if (len(nodeAttributes) > len(correctAttributes)):
         print('too many attributes')
+        out += 'too many attributes \n'
 
     elif (len(nodeAttributes) < len(correctAttributes)):
         print('attributes missing')
+        out .append('attributes missing \n')
 
     found = False
     for c in correctAttributes:
         for n in nodeAttributes:
             if (c.getLabel() == n.getLabel()):
+                if (c.getPrimary() != n.getPrimary()):
+                    temp = '{0} is not a primary key \n'.format(c.getLabel())
+                    print(temp)
+                    out.append(temp)
                 found = True
-                print('found', c.getLabel())
+                # print('found', c.getLabel())
         if (found == False):
-            print('attribute missing ', c.getLabel())
+            print('attribute missing {0} for entity {1}'.format(c.getLabel(), nodename))
+            out.append('attribute missing {0} for entity {1} \n'.format(c.getLabel(), nodename))
         found = False
 
 
-def checkClasses(graph, correct):
+def checkClasses(graph, correct, out):
     found = False
     for c in correct:
         for i in graph:
             if (type(i) == model.Node and type(c) == model.Node):
                 if (i.getLabel() == c.getLabel()):
                     found = True
-                    print('class found', c.getLabel())
+                # print('class found', c.getLabel())
             if (type(i) == model.Relation and type(c) == model.Relation):
                 if (i.getLabel() == c.getLabel()):
                     found = True
-                    print('relation found', c.getLabel())
+                # print('relation found', c.getLabel())
         if (found == False and type(c) == model.Node):
             print('class missing ', c.getLabel())
+            out.append('class missing \n', c.getLabel())
         if (found == False and type(c) == model.Relation):
             print('relationship missing ', c.getLabel())
+            out.append('relationship missing ', c.getLabel())
         found = False
 
 
-def checkRelationCardinality(graph, correct):
+def checkRelationCardinality(graph, correct, out):
     for c in correct:
         for g in graph:
             if (type(c) == model.Relation and type(g) == model.Relation):
@@ -67,18 +76,22 @@ def checkRelationCardinality(graph, correct):
                 if (g1.getLabel() == c1.getLabel()) and (g2.getLabel() == c2.getLabel()):
                     g1Cardinality = getCardinalityFromEdge(graph, g1, g)
                     g2Cardinality = getCardinalityFromEdge(graph, g2, g)
-                    checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality)
+                    checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out)
                 if (g2.getLabel() == c1.getLabel()) and (g1.getLabel() == c2.getLabel()):
                     g1Cardinality = getCardinalityFromEdge(graph, g2, g)
                     g2Cardinality = getCardinalityFromEdge(graph, g1, g)
-                    checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality)
+                    checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out)
 
 
-def checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality):
-    if (g1Cardinality == c1Cardinality and g2Cardinality == c2Cardinality):
-        print('right cardinalities for ', c.getLabel())
+def checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out):
+    # if (g1Cardinality == c1Cardinality and g2Cardinality == c2Cardinality):
+    #   print('right cardinalities for ', c.getLabel())
     if (g1Cardinality != c1Cardinality):
-        print('wrong cardinality for {0} related to {1} is {2} instead of {3}'.format(c.getLabel(),
+        print('wrong cardinality for {0} related to {1} is {2} but should be {3}'.format(c.getLabel(),
+                                                                                      g1.getLabel(),
+                                                                                      g1Cardinality,
+                                                                                      c1Cardinality))
+        out.append('wrong cardinality for {0} related to {1} is {2} but should be {3} \n'.format(c.getLabel(),
                                                                                       g1.getLabel(),
                                                                                       g1Cardinality,
                                                                                       c1Cardinality))
@@ -87,7 +100,10 @@ def checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Car
                                                                                       g2.getLabel(),
                                                                                       g2Cardinality,
                                                                                       c2Cardinality))
-
+        out.append('wrong cardinality for {0} related to {1} is {2} instead of {3} \n'.format(c.getLabel(),
+                                                                                      g2.getLabel(),
+                                                                                      g2Cardinality,
+                                                                                      c2Cardinality))
 
 def getNodesFromRelation(graph, relation):
     e1, e2 = getEdgesFromRelation(graph, relation)
