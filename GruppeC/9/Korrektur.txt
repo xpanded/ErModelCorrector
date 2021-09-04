@@ -1,0 +1,37 @@
+Schwere Fehler:
+
+***
+
+Mittlere Fehler:
+
+** Deine verwaltungsspezifischen Beziehungen sind überflüssig: bitte also "bearbeitet", "löscht", "hinzufügt, "entfernt" entfernen. Das Änderungsdatum kann einfach als Attribut an Blogeintrag stehen.
+
+Leichte Fehler:
+
+* Fehlendes Attribut: Bild.Pfad
+* Fehlendes Attribut: Kommentar.Text
+* Überflüssiges Attribut: kommentiert.Erstellungsdatum (ist schon an der ternären Beziehung vorhanden)
+* Überflüssige Beziehung: Redakteur - postet - Produktrezension
+* Der PK von Nutzer ist nicht minimal (Email oder Benutzername kann gewählt werden)
+ 
+Anmerkungen:
+
+-
+
+Bewertung:
+
+*** - Schwere Fehler
+**  - Mittlere Fehler
+*   - Leichte Fehler
+
+Hinweise: 
+
+- Bitte wenden Sie sich bei konkreten Fragen zur Korrektur direkt an Ihren zuständigen Korrektor. Nutzen Sie hierfür bitte die Sprechstunden.
+
+Gesamtbewertung des Projektteils:
+
+Nicht bestanden.
+
+Korrektur von: 
+
+Christian Pütz

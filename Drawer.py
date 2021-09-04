@@ -11,8 +11,13 @@ def drawNode(my_canvas, attribute):
 def drawAttribute(my_canvas, attribute):
     x, y = attribute.getCoordinates()
     text = attribute.getLabel()
+    underline = attribute.getPrimary()
     my_canvas.create_oval(x, y, x + 86, y + 30, fill='cyan')
-    my_canvas.create_text(x + 10, y + 9, text=text, anchor='nw')
+    #font = tkFont.Font(option, ...)
+    if(underline):
+        my_canvas.create_text(x + 10, y + 9, text=text, anchor='nw')
+    else:
+        my_canvas.create_text(x + 10, y + 9, text=text, anchor='nw')
 
 
 def drawRelation(my_canvas, attribute):

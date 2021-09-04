@@ -1,0 +1,36 @@
+Schwere Fehler:
+
+*** Verletzung der 1. Normalform: Blogeintrag.Schlagwort (du speicherst hier Schlagwörter als Liste in einem Attribut, das Attribut ist demnach nicht atomar) - dies verletzt die erste Normalform.
+
+Mittlere Fehler:
+
+** Deine verwaltungsspezifischen Beziehungen sind überflüssig: bitte also "verwaltet", "ändert", "löscht" sowie "Chefredakteur" - "fügt hinzu" - "Nutzer" entfernen. "Änderungsdatum" kann dann auch als Attribut direkt an Blogeintrag gestellt werden.
+
+Leichte Fehler:
+
+* Die ternäre Beziehung bzgl. Bewertung ist nicht korrekt (Kardinalität zwischen Nutzer/gibt_ab und Bewertung/gibt_ab muss [0,*] sein)
+* Überflüssige Beziehung: Redakteur - verfasst - Rezension (dies ist transitiv schon gegeben)
+* Dein PK bei Nutzer ist nicht minimal (E-Mail oder Benutzername kann einzeln als PK gewählt werden)
+* Fehlendes Attribut: Kommentar.Text
+ 
+Anmerkungen:
+
+-
+
+Bewertung:
+
+*** - Schwere Fehler
+**  - Mittlere Fehler
+*   - Leichte Fehler
+
+Hinweise: 
+
+- Bitte wenden Sie sich bei konkreten Fragen zur Korrektur direkt an Ihren zuständigen Korrektor. Nutzen Sie hierfür bitte die Sprechstunden.
+
+Gesamtbewertung des Projektteils:
+
+Nicht bestanden.
+
+Korrektur von: 
+
+Christian Pütz

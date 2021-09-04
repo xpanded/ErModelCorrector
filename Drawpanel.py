@@ -15,6 +15,7 @@ def drawH(my_canvas, alElements):
     Drawer.drawER(my_canvas, alElements)
 
 
+
 def openCorrectFile():
     file = askopenfilename(title='Choose GraphML', filetype=[("GraphML File", "*.graphml")])
     if file:

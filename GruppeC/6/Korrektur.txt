@@ -1,0 +1,37 @@
+Schwere Fehler:
+
+***
+
+Mittlere Fehler:
+
+**
+
+Leichte Fehler:
+
+* Falsche Kardinalität: Zwischen "gehoeren" und "Kommentar" ([1,1] ist korrekt)
+* Falsche Kardinalität: Zwischen "schreiben" und "Kommentar" ([1,1] ist korrekt)
+* Falsche Kardinalität: Zwischen "bewerten" und "Nutzer" ([0,*] ist korrekt)
+* Fehlendes Attribut: Kommentar.Text
+* Schlagwort.Tag bietet sich als Primärschlüssel an
+ 
+Anmerkungen:
+
+-
+
+Bewertung:
+
+*** - Schwere Fehler
+**  - Mittlere Fehler
+*   - Leichte Fehler
+
+Hinweise: 
+
+- Bitte wenden Sie sich bei konkreten Fragen zur Korrektur direkt an Ihren zuständigen Korrektor. Nutzen Sie hierfür bitte die Sprechstunden.
+
+Gesamtbewertung des Projektteils:
+
+Bestanden.
+
+Korrektur von: 
+
+Christian Pütz

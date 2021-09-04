@@ -1,0 +1,36 @@
+Schwere Fehler:
+
+***
+
+Mittlere Fehler:
+
+** Deine verwaltungsspezifischen Beziehungen sind allesamt überflüssig: bitte also "bearbeitet", "löscht" sowie "Chefredakteur" - "fügt hinzu" - "Nutzer" entfernen. Bei Fragen wende Dich gerne an mich.
+
+Leichte Fehler:
+
+* Falsche Kardinalität: Zwischen "Nutzer" und "bewertet" ([0,*] ist korrekt)
+* Falsche Kardinalität: Zwischen "Blogeintrag" und "bewertet" ([0,*] ist korrekt)
+* Überflüssiges Attribut: "Redakteur" an "legt an"
+* Überflüssiges Attribut: "Nutzer" an "schaut"
+
+Anmerkungen:
+
+-
+
+Bewertung:
+
+*** - Schwere Fehler
+**  - Mittlere Fehler
+*   - Leichte Fehler
+
+Hinweise: 
+
+- Bitte wenden Sie sich bei konkreten Fragen zur Korrektur direkt an Ihren zuständigen Korrektor. Nutzen Sie hierfür bitte die Sprechstunden.
+
+Gesamtbewertung des Projektteils:
+
+Ganz knapp bestanden.
+
+Korrektur von: 
+
+Christian Pütz

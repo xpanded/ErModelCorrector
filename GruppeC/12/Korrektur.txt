@@ -1,0 +1,38 @@
+Schwere Fehler:
+
+***
+
+Mittlere Fehler:
+
+** Fehlende Beziehung: bewertet (zwischen Nutzer und Eintrag)
+
+Leichte Fehler:
+
+* Format der Abgabe: Du solltest Dein ERM als PDF-Datei abgeben, nicht als PNG-Bild
+* Fehlendes Attribut: Kommentar.Text
+* Fehlendes Attribut: Schlagwort.Bezeichnung (dieser ist auch PK)
+* Fehlendes Attribut: Rezension.Bezeichnung
+* Fehlendes Attribut: Rezension.Fazit
+* Fehlendes Attribut: Bild.Pfad
+ 
+Anmerkungen:
+
+-
+
+Bewertung:
+
+*** - Schwere Fehler
+**  - Mittlere Fehler
+*   - Leichte Fehler
+
+Hinweise: 
+
+- Bitte wenden Sie sich bei konkreten Fragen zur Korrektur direkt an Ihren zuständigen Korrektor. Nutzen Sie hierfür bitte die Sprechstunden.
+
+Gesamtbewertung des Projektteils:
+
+Nicht bestanden.
+
+Korrektur von: 
+
+Christian Pütz

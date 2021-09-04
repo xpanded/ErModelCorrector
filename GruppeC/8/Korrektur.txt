@@ -1,0 +1,33 @@
+Schwere Fehler:
+
+***
+
+Mittlere Fehler:
+
+**
+
+Leichte Fehler:
+
+* Überflüssige Beziehung: "Redakteur - verfasst - Produktrezension" (die Beziehung ist transitiv gegeben)
+
+Anmerkungen:
+
+-
+
+Bewertung:
+
+*** - Schwere Fehler
+**  - Mittlere Fehler
+*   - Leichte Fehler
+
+Hinweise: 
+
+- Bitte wenden Sie sich bei konkreten Fragen zur Korrektur direkt an Ihren zuständigen Korrektor. Nutzen Sie hierfür bitte die Sprechstunden.
+
+Gesamtbewertung des Projektteils:
+
+Bestanden.
+
+Korrektur von: 
+
+Christian Pütz

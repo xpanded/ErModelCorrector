@@ -1,0 +1,147 @@
+
+Kritische Entscheidungen:
+_________________________
+Teil 1: Aufsplitten der Entities und Beziehungen
+
+Entities:
+---------
+Nutzer
+Redakteur
+Chefredakteur
+Blogeintrag
+Produktrezension
+Album
+Bild
+Kommentar
+Schlagwort
+
+Beziehungen:
+------------
+Redakteut-IST-Nutzer
+Chefredakteur-IST-Redakteur
+Produktrezension-IST-Blogeintrag
+Album-IST-Blogeintrag
+Redakteur-folgen-Redakteur
+Redakteur-verfassen-Produktrezension
+Redakteur-anlegen-Blogeintrag
+Chefredakteur-bearbeiten-Blogeintrag
+Nutzer-ansehen-Blogeintrag
+Nutzer-bewerten-Blogeintrag
+Nutzer-schreiben-Kommentar
+Album-enthalten-Bild
+Blogeintrag-speichern-Schlagwort
+Kommentar-gehoeren-Blogeintrag
+
+_____________________________________________
+
+Teil 2: Spezielle Erklärungen zu einigen Teilen im ERM
+
+Nutzer:
+-------
+1) Email als PK gesetzt, da es hier durch das Stichwort "eindeutig" gekennzeichnet war.
+2) Benutzername sollte auch eindeutig sein laut Anwendungsszenario. Da es nur einen PK geben kann habe ich 
+mich entschieden Benutzername als normales Attribut zu wählen nicht als PK aber durch Checks im dritten Teil 
+ist es möglich zu prüfen ob es sich um ein eindeutiges Attribut handelt. 
+3) Beziehungen zu anderen Entities:
+Nutzer-bearbeiten-Kommentar nicht umgesetzt, da dies analog wie bei den anderen durch Verwaltungsspezifische Befehle 
+im dritten Teil des Projektes umgesetzt werden kann.
+	a) Nutzer-schreiben-Kommentar: 
+	Wird benötigt, da Mehrfachkommentare möglich sein sollen.
+	b) Nutzer-bewerten_Blogeintrag:
+	Wird benötigt, da eine Skala als Attribut gesetzt werden kann. Ich habe mich entschieden im dritten Teil die 
+	mögliche Daten als einzelnen Integer zuzulassen von 1 bis 10 wie in Aufgabenstellung angegeben um eine Bewertung
+	auf dieser Skala zu ermöglichen. Das Attribut Skala das hier ist ist ein atomares Attribut.
+	c) Nutzer-ansehen-Blogeintrag:
+	Wird benötigt, da gespeichert werden soll ob ein Nutzer einen Beitrag angesehen hat. 
+
+
+Redakteur:
+----------
+1) Durch Pfeil gekennzeichnet, dass ein Redakteur auch ein Nutzer ist (IST-Beziehung). Daher erbt dieser im späteren
+Verlauf auch die Attribute des Nutzers.
+2) Es wurde keine spezielle Beziehung "bearbeiten" von Redakteur zu Blockeintrag gemacht, weil
+im Anwendungsszenario stand, dass ein Redakteur nur seine eigenen Beiträge bearbeiten und löschen kann.
+Ich habe mir gedacht, dass man später durch durch die allgemeinen edit und delete Anweisungen das Ziel
+erreichen kann unter der Abfrage ob es sich auch um einen Eintrag des jeweiligen Redakteurs handelt. Das kann
+man leichter und schöner im dritten Teil auflösen.
+3) Rekursive Beziehung "folgen" durch [0,*] auf beiden Kanten gekennzeichnet, da sonst nichts weiteres vermekt war.
+4) Optionales Attribut "Biographie" als solches gekennzeichnet, spielt erst bei den weiteren Teilen eine Rolle. 
+
+
+Chefredakteur:
+--------------
+1) Keinen Pfeil für die IST-Beziehung zwischen Nutzer und Chefredakteur gemacht.
+Es ist so, dass ein Chefredakteur ein Redakteur ist, ebenso ist ein Redakteur ein Nutzer -> Durch Transitivität folgt, dass ebenso
+ein Chefredakteur ein Nutzer ist. Um das ERM leicht zu halten, habe ich nicht noch einmal den Pfeil gesetzt. Das ist später im zweiten Teil
+des Projekts eindeutig.
+2) PK von Chefredakteur. Da habe ich mir mehr Gedanken gemacht:
+Durch die Transitivität zwischen Nutzer, Redakteur und Chefredakteur habe ich das Relationale Modell einmal 
+entwurfsmäßig gemacht durch den Tipp in der Übung am Freitag. Da habe ich gemerkt, dass nach der Verschmelzung das wie folgt aussehen könnte:
+Nutzer(Email (als PK), Benutzername, Geschlecht, Geburtsdatum, Passwort)
+Redakteur(Nutzer.Email (als PK und FK), Vorname, Nachname, Biographie)
+Chefredakteur (Redakteur.Nutzer.Email (als PK und FK), Telefonnummer)
+Ich habe hier in Klammern die PK und FK gekennzeichnet, da es schwierig ist hier zu unter- & überstreichen.
+Das Attribut Telefonnummer kann trotzdem eindeutig sein, indem man es checkt im dritten Teil, da es keinen Sinn macht, dass eine 
+Telefonnummer mehrfach vergeben wird. Aber es muss hier nicht notwendig als PK gesetzt werden. Ich finde es wichtiger es innerhalb des Systems
+einheitlich zu lassen also bei allen Rollen Nutzer, Redakteur und Chefredakteur die Email als PK zu nutzen um so weniger Umstände und Joins zu haben
+in den weiteren Teilen. 
+3) Beziehungen die nicht im ERM umgesetzt wurden, da sie im späteren verlauf durch die Programmierung umgesetzt werden können:
+	kann durch die Verwaltungsspezifischen Funktionen in SQLITE umgesetzt werden. 	
+	Es muss nicht gespeichert werden welcher Chefredakteur was bearbeitet oder gelöscht hat. Laut Anwendungsszenario nicht genauer aufgeführt.
+	a) Chefredakteur-bearbeiten/löschen-Kommentare
+	b) Chefredakteur-edit-Redakteur
+	c) Chefredakteur-bearbeiten-Nutzer
+	d) Chefredakteur-bearbeiten/löschen-Blogeintrag
+
+
+Blogeintrag:
+------------
+1) Das Attribut "Änderungsdatum" habe ich nach der Besprechung in der Übung überlegt und gedacht man kann es 
+als default Datum setzen lassen. Jedesmal die aktuelle Zeit beim Speichern. Das wäre erst beim dritten Teil von Bedeutung.
+Da müsste man zunächst durch einen Check prüfen ob dieser Beitrag schon exisiert und anschließend das Änderungsdatum auf default vom 
+System übernehmen lassen. Das folgt im späteren Verlauf aber so wäre mein Ansatz.
+2) Bei der Beziehung Kommentar-gehoeren-Blogeintrag habe ich aus dem Anwendungsszenario rausgelesen, dass immer ein 
+Kommentar zu einem bestimmten Blogeintrag gehört. Es macht natürlich Sinn das zu speichern, wenn man beispielsweise eine 
+Contentanalyse machen muss oder ähnliches und die Kommentare eines Blogeintrages analysieren will kann man so leichter 
+den Zugriff ermöglichen. Die Kardinalitäten habe ich in der Min-Max-Notation als [ 0 , * ] auf beiden Kanten gewählt, da 
+nichts genaueres angegeben war.
+3) Notation als [1,1] auf der Kante zum Blogeintrag hin, da im Text stand ein Beitrag kann immer nur von einem Redakteur verfasst 
+werden, (bei dem Text der Produktrezension, da aber die Prduktrezension ein spezieller Blogeintrag ist gilt dies hier auch.)
+Auf der Kante des Redakteurs habe ich [0,*] gewählt, da der Redakteur beliebig viele Beiträge verfassen kann.
+
+
+Produktrezension:
+-----------------
+1) Durch Pfeil gekennzeichnet, dass es sich um eine IST-Beziehung handelt. Somit würde Album im späteren Verlauf die Attribute 
+von Blogeintrag übernehmen. 
+2) Weitere Attribute Produktbezeichnung und Fazit. Zu dem Fazit steht es soll auf 1000 Zeichen begrenz sein, dass kann man im 
+dritten Teil durch Checks umsetzen.
+3) Notation als [1,1] auf der Kante zur Produktrezension hin, da im Text stand ein Beitrag kann immer nur von einem Redakteur verfasst 
+werden. Auf der Kante des Redakteurs habe ich [0,*] gewählt, da der Redakteur beliebig viele Beiträge verfassen kann.
+
+
+Album:
+------
+1) Durch Pfeil gekennzeichnet, dass es sich um eine IST-Beziehung handelt. Somit würde Album im späteren Verlauf die Attribute 
+von Blogeintrag übernehmen. 
+2) Zusätzlich ein weiteres Attribut welches ich "Zugang" genannt habe. Darin soll es später möglich
+sein zu speichern ob es sich um ein privates oder öffentliches Album handelt.
+3) In einem Album muss mindestens ein Bild und maximal 15 drin sein. Daher die Notation [1,15] auf der Kante zum Album hin.
+Es ist nichts genaueres festgelegt daher [0,*] auf der anderen Kante. 
+
+
+Bild:
+-----
+1) Nicht als solches in DB gespeichert also später im dritten Teil kein Blob als Datentyp sondern nur einen Pfad angeben.
+2) Notationen s.Album.
+
+
+Schlagwort:
+-----------
+1) Als eigene Entity gewählt, weil im Anwendungsszenario steht, dass zu jedem Blogeintrag "mindestens" ein Schlagwort gespeichert werden
+kann. Um die Notation wählen zu können und das ERM in erster Normalform zu halten muss hier eine eigene Entity Schlagwort existieren.
+2) In der Aufgabenstellung war kein Attribut angegeben zu der Entity Schlagwort. Deswegen habe ich mich entschieden eines mit dem Namen "Tag"
+zu wählen, weil der Inhalt in einem Attribut gespeichert werden soll. In der VL haben wir gelernt, dass man im ERM keine Entities ohne Attribut aufschreibt.
+3) Notation auf Kante der Seite zum Blogeintrag als [1,*] gewählt, da in der Aufgabenstellung steht mindestens 1 Schlagwort pro Blogeintrag muss gespeichert werden.
+Bei der anderen habe ich mich entschieden [0,*] zu wählen, da nichts genaueres angegeben wurde.
+

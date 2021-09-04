@@ -1,0 +1,37 @@
+Schwere Fehler:
+
+***
+
+Mittlere Fehler:
+
+** Deine verwaltungsspezifischen Beziehungen sind überflüssig: bitte also "managiert", "verwaltet" sowie "loescht" entfernen. Bei Fragen wende Dich gerne an mich.
+** Fehlende Beziehung: Nutzer - "sieht an" - Blogeintrag
+
+Leichte Fehler:
+
+* Fehlendes Attribut: Schlagwort.Text (dieses Attribut ist auch dann der PK)
+* Dein PK bei Nutzer ist nicht minimal (E-Mail oder Benutzername kann einzeln als PK gewählt werden)
+* Falsche Kardinalität: Zwischen "Redakteur" und "speichert" ([0,*] ist korrekt)
+* Überflüssige Beziehung: Redakteur - "schreibt" - Rezension (ist transitiv schon gegeben)
+
+Anmerkungen:
+
+- Fazit kann direkt als Attribut an Rezension gestellt werden (keine Extra-Entität nötig)
+
+Bewertung:
+
+*** - Schwere Fehler
+**  - Mittlere Fehler
+*   - Leichte Fehler
+
+Hinweise: 
+
+- Bitte wenden Sie sich bei konkreten Fragen zur Korrektur direkt an Ihren zuständigen Korrektor. Nutzen Sie hierfür bitte die Sprechstunden.
+
+Gesamtbewertung des Projektteils:
+
+Nicht bestanden.
+
+Korrektur von: 
+
+Christian Pütz

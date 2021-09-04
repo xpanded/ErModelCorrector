@@ -1,0 +1,36 @@
+Schwere Fehler:
+
+***
+
+Mittlere Fehler:
+
+** Falsche Modellierung: In Deinem ERM kann ein Nutzer einen Blogeintrag nur höchstens ein Mal kommentieren. Hier muss der Kommentar als Entität mit entsprechenden Beziehungen ausgelagert werden. Zusätzlich: Fehlendes Attribut: Kommentar.Text (in Deinem Modell kann, zusätzlich zu obigem Fehler, auch kein Kommentartext gespeichert werden)
+
+Leichte Fehler:
+
+* Fehlendes Attribut: Schlagwort.Text (dieses Attribut ist auch dann der PK)
+* Fehlendes Attribut: Bild.Pfad
+* Dein PK bei Nutzer ist nicht minimal (E-Mail oder Benutzername kann einzeln als PK gewählt werden)
+* Überflüssige Beziehung: Redakteur - "schreibt" - Rezension (ist transitiv schon gegeben)
+
+Anmerkungen:
+
+- Falsche Kardinalität: Zwischen "Blogeintrag" und "legt_an" (hier ist [1,1] korrekt) - siehe Aufgabenstellung - bitte ändern.
+
+Bewertung:
+
+*** - Schwere Fehler
+**  - Mittlere Fehler
+*   - Leichte Fehler
+
+Hinweise: 
+
+- Bitte wenden Sie sich bei konkreten Fragen zur Korrektur direkt an Ihren zuständigen Korrektor. Nutzen Sie hierfür bitte die Sprechstunden.
+
+Gesamtbewertung des Projektteils:
+
+Knapp bestanden.
+
+Korrektur von: 
+
+Christian Pütz

@@ -1,0 +1,38 @@
+Schwere Fehler:
+
+***
+
+Mittlere Fehler:
+
+**
+
+Leichte Fehler:
+
+* Falsche Kardinalität: Zwischen "gibt" und "Kommentar" ([1,1] ist korrekt)
+* Falsche Kardinalität: Zwischen "hat" und "Kommentar" ([1,1] ist korrekt)
+* Falsche Kardinalität: Zwischen "bewertet" und "Blogeintrag" ([0,*] ist korrekt)
+* Fehlendes Attribut: Bild.Pfad
+* Überflüssige Beziehung: Redakteur - "schreibt" - Rezension
+* Schlagwort.Tag bietet sich als Primärschlüssel an
+ 
+Anmerkungen:
+
+-
+
+Bewertung:
+
+*** - Schwere Fehler
+**  - Mittlere Fehler
+*   - Leichte Fehler
+
+Hinweise: 
+
+- Bitte wenden Sie sich bei konkreten Fragen zur Korrektur direkt an Ihren zuständigen Korrektor. Nutzen Sie hierfür bitte die Sprechstunden.
+
+Gesamtbewertung des Projektteils:
+
+Knapp bestanden.
+
+Korrektur von: 
+
+Christian Pütz
