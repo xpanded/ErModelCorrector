@@ -19,6 +19,9 @@ class Edge:
     def getTarget(self):
         return self.target
 
+    def setColor(self,color):
+        self.color=color
+
     def getColor(self):
         return self.color
 

@@ -1,4 +1,5 @@
 import model
+import re
 
 
 def checkAttributes(graph, correct, out):
@@ -26,7 +27,6 @@ def controllIfMissing(nodeAttributes, correctAttributes, nodename, out):
 
     elif (len(nodeAttributes) < len(correctAttributes)):
         print('attributes missing')
-        out .append('attributes missing \n')
 
     found = False
     for c in correctAttributes:
@@ -57,11 +57,13 @@ def checkClasses(graph, correct, out):
                     found = True
                 # print('relation found', c.getLabel())
         if (found == False and type(c) == model.Node):
-            print('class missing ', c.getLabel())
-            out.append('class missing \n', c.getLabel())
+            txt = 'class missing ' + str(c.getLabel()) + '\n'
+            print(txt)
+            out.append(txt)
         if (found == False and type(c) == model.Relation):
-            print('relationship missing ', c.getLabel())
-            out.append('relationship missing ', c.getLabel())
+            txt = 'relationship missing ' + str(c.getLabel()) + '\n'
+            print(txt)
+            out.append(txt)
         found = False
 
 
@@ -73,37 +75,45 @@ def checkRelationCardinality(graph, correct, out):
                 c1Cardinality = getCardinalityFromEdge(correct, c1, c)
                 c2Cardinality = getCardinalityFromEdge(correct, c2, c)
                 g1, g2 = getNodesFromRelation(graph, g)
-                if (g1.getLabel() == c1.getLabel()) and (g2.getLabel() == c2.getLabel()):
-                    g1Cardinality = getCardinalityFromEdge(graph, g1, g)
-                    g2Cardinality = getCardinalityFromEdge(graph, g2, g)
-                    checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out)
-                if (g2.getLabel() == c1.getLabel()) and (g1.getLabel() == c2.getLabel()):
-                    g1Cardinality = getCardinalityFromEdge(graph, g2, g)
-                    g2Cardinality = getCardinalityFromEdge(graph, g1, g)
-                    checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out)
+                if (c1Cardinality != '' and c2Cardinality != ''):
+                    if (g1.getLabel() == c1.getLabel()) and (g2.getLabel() == c2.getLabel()):
+                        g1Cardinality = getCardinalityFromEdge(graph, g1, g)
+                        g2Cardinality = getCardinalityFromEdge(graph, g2, g)
+                        checkCarnality(g, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out,
+                                       graph)
+                    if (g2.getLabel() == c1.getLabel()) and (g1.getLabel() == c2.getLabel()):
+                        g1Cardinality = getCardinalityFromEdge(graph, g2, g)
+                        g2Cardinality = getCardinalityFromEdge(graph, g1, g)
+                        checkCarnality(g, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out,
+                                       graph)
 
 
-def checkCarnality(c, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out):
+def checkCarnality(relation, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out, graph):
     # if (g1Cardinality == c1Cardinality and g2Cardinality == c2Cardinality):
     #   print('right cardinalities for ', c.getLabel())
     if (g1Cardinality != c1Cardinality):
-        print('wrong cardinality for {0} related to {1} is {2} but should be {3}'.format(c.getLabel(),
-                                                                                      g1.getLabel(),
-                                                                                      g1Cardinality,
-                                                                                      c1Cardinality))
-        out.append('wrong cardinality for {0} related to {1} is {2} but should be {3} \n'.format(c.getLabel(),
-                                                                                      g1.getLabel(),
-                                                                                      g1Cardinality,
-                                                                                      c1Cardinality))
+        print('wrong cardinality for {0} related to {1} is {2} but should be {3}'.format(relation.getLabel(),
+                                                                                         g1.getLabel(),
+                                                                                         g1Cardinality,
+                                                                                         c1Cardinality))
+        out.append('wrong cardinality for {0} related to {1} is {2} but should be {3} \n'.format(relation.getLabel(),
+                                                                                                 g1.getLabel(),
+                                                                                                 g1Cardinality,
+                                                                                                 c1Cardinality))
+        edge = getEdgeBetweenNodeAndRelation(graph, g1, relation)
+        edge.setColor('cyan')
     if (g2Cardinality != c2Cardinality):
-        print('wrong cardinality for {0} related to {1} is {2} instead of {3}'.format(c.getLabel(),
+        print('wrong cardinality for {0} related to {1} is {2} instead of {3}'.format(relation.getLabel(),
                                                                                       g2.getLabel(),
                                                                                       g2Cardinality,
                                                                                       c2Cardinality))
-        out.append('wrong cardinality for {0} related to {1} is {2} instead of {3} \n'.format(c.getLabel(),
-                                                                                      g2.getLabel(),
-                                                                                      g2Cardinality,
-                                                                                      c2Cardinality))
+        out.append('wrong cardinality for {0} related to {1} is {2} instead of {3} \n'.format(relation.getLabel(),
+                                                                                              g2.getLabel(),
+                                                                                              g2Cardinality,
+                                                                                              c2Cardinality))
+        edge = getEdgeBetweenNodeAndRelation(graph, g2, relation)
+        edge.setColor('cyan')
+
 
 def getNodesFromRelation(graph, relation):
     e1, e2 = getEdgesFromRelation(graph, relation)
@@ -136,4 +146,15 @@ def getCardinalityFromEdge(graph, n1, n2):
         if (type(i) == model.Edge):
             if (i.getTarget() == n1 and i.getSource() == n2) or (
                     i.getTarget() == n2 and i.getSource() == n1):
-                return i.getLabel()
+                label = str(i.getLabel())
+                pattern = re.compile(r'\s+')
+                label = re.sub(pattern, '', label)
+                return label
+
+
+def getEdgeBetweenNodeAndRelation(graph, node, r):
+    for i in graph:
+        if (type(i) == model.Edge):
+            if (i.getTarget() == node and i.getSource() == r) or (
+                    i.getTarget() == r and i.getSource() == node):
+                return i

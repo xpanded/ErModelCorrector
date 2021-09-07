@@ -4,7 +4,7 @@ import model
 import Corrector
 
 
-def correct(xmlfile, correctfile, out):
+def parse(xmlfile, correctfile, out):
     ns = {"y": "https://www.yworks.com/xml/graphml", "gr": "http://graphml.graphdrawing.org/xmlns"}
     ET.register_namespace('gr', 'http://graphml.graphdrawing.org/xmlns')
     ET.register_namespace('y', 'https://www.yworks.com/xml/graphml')
@@ -41,11 +41,12 @@ def correct(xmlfile, correctfile, out):
     model.printall(alElements)
     model.printall(cElements)
 
-    Corrector.checkAttributes(alElements, cElements,out)
-    Corrector.checkClasses(alElements, cElements,out)
-    Corrector.checkRelationCardinality(alElements, cElements,out)
-
     return alElements, cElements
+
+def correct(alElements, cElements, out):
+    Corrector.checkAttributes(alElements, cElements, out)
+    Corrector.checkClasses(alElements, cElements, out)
+    Corrector.checkRelationCardinality(alElements, cElements, out)
 
 
 def getMinMax(alElements):
@@ -77,6 +78,17 @@ def normaliseCoordinates(alElements, minX, minY, maxX, maxY):
             continue
         else:
             x, y = i.getCoordinates()
-            x = (int(float(x)) - minX) * multX/2
-            y = (int(float(y)) - minY) * multY/2
+            x = (int(float(x)) - minX) * multX / 2
+            y = (int(float(y)) - minY) * multY / 2
+            i.setCoordinates(int(x), int(y))
+
+
+def scaleCoordinates(alElements, scale):
+    for i in alElements:
+        if (type(i) == model.Edge):
+            continue
+        else:
+            x, y = i.getCoordinates()
+            x = (float(x) * float(scale))
+            y = (float(y)) * float(scale)
             i.setCoordinates(int(x), int(y))

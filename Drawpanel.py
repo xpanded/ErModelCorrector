@@ -1,3 +1,5 @@
+from tkinter import ttk
+import tkinter
 from tkinter.filedialog import askopenfilename
 from tkinter import *
 
@@ -6,6 +8,17 @@ import Drawer
 
 Files = [0, 0]
 writer = []
+scale = 1
+
+
+def scale(my_canvas, spinbox):
+    my_canvas.delete("all")
+    alElements, cElements = myParser.parse(Files[1], Files[0], writer)
+    num = spinbox.get()
+    minX, minY, maxX, maxY = myParser.getMinMax(alElements)
+    myParser.normaliseCoordinates(alElements, minX, minY, maxX, maxY)
+    myParser.scaleCoordinates(alElements, num)
+    Drawer.drawER(my_canvas, alElements)
 
 
 def drawH(my_canvas, alElements):
@@ -13,7 +26,6 @@ def drawH(my_canvas, alElements):
     minX, minY, maxX, maxY = myParser.getMinMax(alElements)
     myParser.normaliseCoordinates(alElements, minX, minY, maxX, maxY)
     Drawer.drawER(my_canvas, alElements)
-
 
 
 def openCorrectFile():
@@ -28,13 +40,17 @@ def openStudentFile():
         Files.insert(1, file)
 
 
-def correct(my_canvas,t):
+def correct(my_canvas, t):
+    t.delete(1.0,END)
+    writer=[]
     print(Files[0])
     print(Files[1])
     if Files[0] != 0:
-        alElements, cElements = myParser.correct(Files[1], Files[0], writer)
+        alElements, cElements = myParser.parse(Files[1], Files[0], writer)
+        myParser.correct(alElements,cElements,writer)
         drawH(my_canvas, alElements)
     t.insert(1.0, writer)
+
 
 class Main(Frame):
 
@@ -59,21 +75,25 @@ class Main(Frame):
         my_canvas.grid(row=1, column=0, columnspan=2, rowspan=4,
                        padx=5, sticky=E + W + S + N)
 
-        abtn = Button(self, text="model solution", command=lambda: openCorrectFile())
-        abtn.grid(row=1, column=3)
+        opencorrectbtn = Button(self, text="model solution", command=lambda: openCorrectFile())
+        opencorrectbtn.grid(row=1, column=3)
 
-        cbtn = Button(self, text="model student", command=lambda: openStudentFile())
-        cbtn.grid(row=2, column=3, pady=4)
+        openstudentbtn = Button(self, text="model student", command=lambda: openStudentFile())
+        openstudentbtn.grid(row=2, column=3, pady=4)
 
         t = Text(self, height=6, width=186)
         t.grid(row=5, column=0)
         s = Scrollbar(self)
         t.config(yscrollcommand=s.set)
 
-        hbtn = Button(self, text="Correct", command=lambda: correct(my_canvas,t))
-        hbtn.grid(row=3, column=3)
+        spinbox = Spinbox(self, from_=1, to=100, width=15, textvariable=scale)
+        spinbox.grid(row=5, column=3)
 
+        scalebtn = Button(self, text='Scale', command=lambda: scale(my_canvas,spinbox))
+        scalebtn.grid(row=4, column=3)
 
+        correctbtn = Button(self, text="Correct", command=lambda: correct(my_canvas, t))
+        correctbtn.grid(row=3, column=3)
 
 
 def main():

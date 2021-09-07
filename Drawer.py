@@ -4,7 +4,7 @@ import model
 def drawNode(my_canvas, attribute):
     x, y = attribute.getCoordinates()
     text = attribute.getLabel()
-    my_canvas.create_rectangle(x, y, x + 75, y + 20, fill='cyan')
+    my_canvas.create_rectangle(x, y, x + 75, y + 20, fill='grey')
     my_canvas.create_text(x + 2, y + 2, text=text, anchor='nw')
 
 
@@ -12,10 +12,10 @@ def drawAttribute(my_canvas, attribute):
     x, y = attribute.getCoordinates()
     text = attribute.getLabel()
     underline = attribute.getPrimary()
-    my_canvas.create_oval(x, y, x + 86, y + 30, fill='cyan')
+    my_canvas.create_oval(x, y, x + 86, y + 30, fill='grey')
     #font = tkFont.Font(option, ...)
     if(underline):
-        my_canvas.create_text(x + 10, y + 9, text=text, anchor='nw')
+        my_canvas.create_text(x + 10, y + 9, text=text, anchor='nw',fill='blue')
     else:
         my_canvas.create_text(x + 10, y + 9, text=text, anchor='nw')
 
