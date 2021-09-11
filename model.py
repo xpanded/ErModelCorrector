@@ -19,8 +19,8 @@ class Edge:
     def getTarget(self):
         return self.target
 
-    def setColor(self,color):
-        self.color=color
+    def setColor(self, color):
+        self.color = color
 
     def getColor(self):
         return self.color
@@ -62,6 +62,7 @@ class Relation:
         self.label = label
         self.x = x
         self.y = y
+        self.color = 'black'
 
     def getLabel(self):
         return self.label
@@ -75,6 +76,12 @@ class Relation:
     def setCoordinates(self, x, y):
         self.x = x
         self.y = y
+
+    def setColor(self, color):
+        self.color = color
+
+    def getColor(self):
+        return self.color
 
 
 class Attribute:
@@ -189,3 +196,4 @@ def createAttribute(nid, label, primary, list, x, y):
 def printall(list):
     for i in list:
         print(i.getLabel())
+

@@ -71,10 +71,10 @@ def checkRelationCardinality(graph, correct, out):
     for c in correct:
         for g in graph:
             if (type(c) == model.Relation and type(g) == model.Relation):
-                c1, c2 = getNodesFromRelation(correct, c)
+                c1, c2 = getNodesFromRelation(correct, c, out)
                 c1Cardinality = getCardinalityFromEdge(correct, c1, c)
                 c2Cardinality = getCardinalityFromEdge(correct, c2, c)
-                g1, g2 = getNodesFromRelation(graph, g)
+                g1, g2 = getNodesFromRelation(graph, g, out)
                 if (c1Cardinality != '' and c2Cardinality != ''):
                     if (g1.getLabel() == c1.getLabel()) and (g2.getLabel() == c2.getLabel()):
                         g1Cardinality = getCardinalityFromEdge(graph, g1, g)
@@ -115,19 +115,25 @@ def checkCarnality(relation, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality
         edge.setColor('cyan')
 
 
-def getNodesFromRelation(graph, relation):
-    e1, e2 = getEdgesFromRelation(graph, relation)
-    n1 = 0
-    n2 = 0
-    if (type(e1.getTarget()) == model.Node):
-        n1 = e1.getTarget()
-    if (type(e1.getSource()) == model.Node):
-        n1 = e1.getSource()
-    if (type(e2.getTarget()) == model.Node):
-        n2 = e2.getTarget()
-    if (type(e2.getSource()) == model.Node):
-        n2 = e2.getSource()
-    return n1, n2
+def getNodesFromRelation(graph, relation, out):
+
+    edgeList =  getEdgesFromRelation(graph, relation)
+    if(len(edgeList)==3):
+        relation.setColor('red')
+        out.append('{0} is a tertiary realtionship \n'.format(relation.getLabel()))
+    if (edgeList[0] is not None and edgeList[1] is not None):
+        e1, e2 = edgeList[0], edgeList[1]
+        n1 = 0
+        n2 = 0
+        if (type(e1.getTarget()) == model.Node):
+            n1 = e1.getTarget()
+        if (type(e1.getSource()) == model.Node):
+            n1 = e1.getSource()
+        if (type(e2.getTarget()) == model.Node):
+            n2 = e2.getTarget()
+        if (type(e2.getSource()) == model.Node):
+            n2 = e2.getSource()
+        return n1, n2
 
 
 def getEdgesFromRelation(graph, relation):
@@ -138,7 +144,7 @@ def getEdgesFromRelation(graph, relation):
                     i.getSource() == relation and type(i.getTarget() == model.Node)):
                 alresult.append(i)
     if (alresult[0] is not None and alresult[1] is not None):
-        return alresult[0], alresult[1]
+        return alresult
 
 
 def getCardinalityFromEdge(graph, n1, n2):
