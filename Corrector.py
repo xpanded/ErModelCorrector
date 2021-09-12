@@ -120,7 +120,7 @@ def getNodesFromRelation(graph, relation, out):
     edgeList =  getEdgesFromRelation(graph, relation)
     if(len(edgeList)==3):
         relation.setColor('red')
-        out.append('{0} is a tertiary realtionship \n'.format(relation.getLabel()))
+        out.append('{0} is a ternary realtionship \n'.format(relation.getLabel()))
     if (edgeList[0] is not None and edgeList[1] is not None):
         e1, e2 = edgeList[0], edgeList[1]
         n1 = 0
@@ -140,8 +140,8 @@ def getEdgesFromRelation(graph, relation):
     alresult = []
     for i in graph:
         if (type(i) == model.Edge):
-            if (i.getTarget() == relation and type(i.getSource() == model.Node)) or (
-                    i.getSource() == relation and type(i.getTarget() == model.Node)):
+            if (i.getTarget() == relation and type(i.getSource()) == model.Node) or (
+                    i.getSource() == relation and type(i.getTarget()) == model.Node):
                 alresult.append(i)
     if (alresult[0] is not None and alresult[1] is not None):
         return alresult

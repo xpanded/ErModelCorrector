@@ -60,6 +60,7 @@ class Relation:
     def __init__(self, nid, label, x, y):
         self.nid = nid
         self.label = label
+        self.attributes = []
         self.x = x
         self.y = y
         self.color = 'black'
@@ -72,6 +73,12 @@ class Relation:
 
     def getCoordinates(self):
         return self.x, self.y
+
+    def addAttribute(self, attribute):
+        self.attributes.append(attribute)
+
+    def getAttributes(self):
+        return self.attributes
 
     def setCoordinates(self, x, y):
         self.x = x
@@ -141,6 +148,10 @@ def createEdge(x, list):
     if (type(source) == Node and type(target) == Attribute):
         source.addAttribute(target)
     if (type(target) == Node and type(source) == Attribute):
+        target.addAttribute(source)
+    if (type(source) == Relation and type(target) == Attribute):
+        source.addAttribute(target)
+    if (type(target) == Relation and type(source) == Attribute):
         target.addAttribute(source)
     list.append(nline)
 
