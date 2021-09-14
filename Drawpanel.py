@@ -13,19 +13,19 @@ scale = 1
 
 def scale(my_canvas, spinbox):
     my_canvas.delete("all")
-    alElements, cElements = myParser.parse(Files[1], Files[0], writer)
+    sElements, cElements = myParser.parse(Files[1], Files[0], writer)
     num = spinbox.get()
-    minX, minY, maxX, maxY = myParser.getMinMax(alElements)
-    myParser.normaliseCoordinates(alElements, minX, minY, maxX, maxY)
-    myParser.scaleCoordinates(alElements, num)
-    Drawer.drawER(my_canvas, alElements)
+    minX, minY, maxX, maxY = myParser.getMinMax(sElements)
+    myParser.normaliseCoordinates(sElements, minX, minY, maxX, maxY)
+    myParser.scaleCoordinates(sElements, num)
+    Drawer.drawER(my_canvas, sElements)
 
 
-def drawH(my_canvas, alElements):
+def drawH(my_canvas, sElements):
     my_canvas.delete("all")
-    minX, minY, maxX, maxY = myParser.getMinMax(alElements)
-    myParser.normaliseCoordinates(alElements, minX, minY, maxX, maxY)
-    Drawer.drawER(my_canvas, alElements)
+    minX, minY, maxX, maxY = myParser.getMinMax(sElements)
+    myParser.normaliseCoordinates(sElements, minX, minY, maxX, maxY)
+    Drawer.drawER(my_canvas, sElements)
 
 
 def openCorrectFile():
@@ -41,14 +41,14 @@ def openStudentFile():
 
 
 def correct(my_canvas, t):
-    t.delete(1.0,END)
-    writer=[]
+    t.delete(1.0, END)
+    writer = []
     print(Files[0])
     print(Files[1])
     if Files[0] != 0:
-        alElements, cElements = myParser.parse(Files[1], Files[0], writer)
-        myParser.correct(alElements,cElements,writer)
-        drawH(my_canvas, alElements)
+        sElements, cElements = myParser.parse(Files[1], Files[0], writer)
+        myParser.correct(sElements, cElements, writer)
+        drawH(my_canvas, sElements)
     t.insert(1.0, writer)
 
 
@@ -89,7 +89,7 @@ class Main(Frame):
         spinbox = Spinbox(self, from_=1, to=100, width=15, textvariable=scale)
         spinbox.grid(row=5, column=3)
 
-        scalebtn = Button(self, text='Scale', command=lambda: scale(my_canvas,spinbox))
+        scalebtn = Button(self, text='Scale', command=lambda: scale(my_canvas, spinbox))
         scalebtn.grid(row=4, column=3)
 
         correctbtn = Button(self, text="Correct", command=lambda: correct(my_canvas, t))

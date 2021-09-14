@@ -27,34 +27,35 @@ def parse(xmlfile, correctfile, out):
             model.createNode(y, cElements)
 
     i = 0
-    alElements = []
+    sElements = []
     for x in root.findall('./gr:graph/', ns):
         text = x.tag.__str__()
         sort = text[39:]  # 39 for the prefix ardess
         y = ET.tostring(x)
         y = str(y)
         if (sort == 'edge'):
-            model.createEdge(y, alElements)
+            model.createEdge(y, sElements)
         if (sort == 'node'):
-            model.createNode(y, alElements)
+            model.createNode(y, sElements)
 
-    model.printall(alElements)
-    model.printall(cElements)
+ #   model.printall(alElements)
+  #  model.printall(cElements)
 
-    return alElements, cElements
+    return sElements, cElements
 
 def correct(alElements, cElements, out):
     Corrector.checkAttributes(alElements, cElements, out)
     Corrector.checkClasses(alElements, cElements, out)
     Corrector.checkRelationCardinality(alElements, cElements, out)
+    Corrector.checkIsRelation(alElements, out)
 
 
-def getMinMax(alElements):
+def getMinMax(sElements):
     minX = 0
     minY = 0
     maxX = 0
     maxY = 0
-    for i in alElements:
+    for i in sElements:
         if (type(i) == model.Edge):
             continue
         else:
@@ -70,10 +71,10 @@ def getMinMax(alElements):
     return minX, minY, maxX, maxY
 
 
-def normaliseCoordinates(alElements, minX, minY, maxX, maxY):
+def normaliseCoordinates(sElements, minX, minY, maxX, maxY):
     multX = 1540 / maxX
     multY = 660 / maxY
-    for i in alElements:
+    for i in sElements:
         if (type(i) == model.Edge):
             continue
         else:
@@ -83,8 +84,8 @@ def normaliseCoordinates(alElements, minX, minY, maxX, maxY):
             i.setCoordinates(int(x), int(y))
 
 
-def scaleCoordinates(alElements, scale):
-    for i in alElements:
+def scaleCoordinates(sElements, scale):
+    for i in sElements:
         if (type(i) == model.Edge):
             continue
         else:

@@ -29,15 +29,16 @@ def controllIfMissing(nodeAttributes, correctAttributes, nodename, out):
         print('attributes missing')
 
     found = False
+    hasprimary = False
     for c in correctAttributes:
         for n in nodeAttributes:
             if (c.getLabel() == n.getLabel()):
-                if (c.getPrimary() != n.getPrimary()):
+                if (c.getPrimary() != n.getPrimary() and hasprimary == False):
                     temp = '{0} is not a primary key \n'.format(c.getLabel())
+                    hasprimary = True
                     print(temp)
                     out.append(temp)
                 found = True
-                # print('found', c.getLabel())
         if (found == False):
             print('attribute missing {0} for entity {1}'.format(c.getLabel(), nodename))
             out.append('attribute missing {0} for entity {1} \n'.format(c.getLabel(), nodename))
@@ -115,10 +116,28 @@ def checkCarnality(relation, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality
         edge.setColor('cyan')
 
 
-def getNodesFromRelation(graph, relation, out):
+def checkIsRelation(graph, out):
+    for i in graph:
+        if (type(i) == model.Edge):
+            if (i.getArrowSource() == True):
+                if (type(i.getTarget()) == model.Relation):
+                    if (i.getTarget().getLabel() == 'IST' or i.getTarget().getLabel() == 'IS'):
+                        continue
+                else:
+                    out.append('{} is not a related to an IS relation'.format(i.getSource().getLabel()))
+                    i.setColor('cyan')
+            elif (i.getArrowTarget() == True):
+                if (type(i.getSource()) == model.Relation):
+                    if (i.getSource().getLabel().upper() == 'IST' or i.getSource().getLabel().upper() == 'IS'):
+                        continue
+                else:
+                    out.append('{} is not a related to an IS relation'.format(i.getTarget().getLabel()))
+                    i.setColor('cyan')
 
-    edgeList =  getEdgesFromRelation(graph, relation)
-    if(len(edgeList)==3):
+
+def getNodesFromRelation(graph, relation, out):
+    edgeList = getEdgesFromRelation(graph, relation)
+    if (len(edgeList) == 3):
         relation.setColor('red')
         out.append('{0} is a ternary realtionship \n'.format(relation.getLabel()))
     if (edgeList[0] is not None and edgeList[1] is not None):

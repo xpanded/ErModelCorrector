@@ -6,6 +6,8 @@ class Edge:
         self.target = target
         self.label = ''
         self.color = 'black'
+        self.arrowSource = False
+        self.arrowTarget = False
 
     def setLabel(self, label):
         self.label = label
@@ -24,6 +26,18 @@ class Edge:
 
     def getColor(self):
         return self.color
+
+    def setArrowSource(self, arrow):
+        self.arrowSource = arrow
+
+    def getArrowSource(self):
+        return self.arrowSource
+
+    def setArrowTarget(self, arrow):
+        self.arrowTarget = arrow
+
+    def getArrowTarget(self):
+        return self.arrowTarget
 
 
 class Node:
@@ -134,9 +148,9 @@ def createEdge(x, list):
     i = 2
 
     while ('key=' in res[i]):
-        i=i+1
+        i = i + 1
 
-    slabels = res[i+4].split('>')
+    slabels = res[i + 4].split('>')
     slabel = slabels[1]
     slabel = slabel.split('<')[0]
 
@@ -145,6 +159,17 @@ def createEdge(x, list):
 
     nline = Edge(sid, source, target)
     nline.setLabel(slabel)
+
+    j = i+1
+    while ('Path' in res[j] or 'Point' in res[j]):
+        j = j + 1
+
+    allarrows = res[j + 1]
+    if ('source="standard' in allarrows):
+        nline.setArrowSource(True)
+    if ('target="standard' in allarrows):
+        nline.setArrowTarget(True)
+
     if (type(source) == Node and type(target) == Attribute):
         source.addAttribute(target)
     if (type(target) == Node and type(source) == Attribute):
@@ -202,9 +227,4 @@ def createRelation(rid, rlabel, list, x, y):
 def createAttribute(nid, label, primary, list, x, y):
     attribute = Attribute(nid, label, primary, x, y)
     list.append(attribute)
-
-
-def printall(list):
-    for i in list:
-        print(i.getLabel())
 
