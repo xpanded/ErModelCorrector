@@ -227,4 +227,3 @@ def createRelation(rid, rlabel, list, x, y):
 def createAttribute(nid, label, primary, list, x, y):
     attribute = Attribute(nid, label, primary, x, y)
     list.append(attribute)
-

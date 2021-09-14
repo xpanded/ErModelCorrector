@@ -1,5 +1,6 @@
 import model
 import re
+import Levenshtein as lev
 
 
 def checkAttributes(graph, correct, out):
@@ -32,7 +33,8 @@ def controllIfMissing(nodeAttributes, correctAttributes, nodename, out):
     hasprimary = False
     for c in correctAttributes:
         for n in nodeAttributes:
-            if (c.getLabel() == n.getLabel()):
+            ratio = lev.ratio(c.getLabel().upper(), n.getLabel().upper())
+            if (c.getLabel() == n.getLabel() or ratio > 0.8):
                 if (c.getPrimary() != n.getPrimary() and hasprimary == False):
                     temp = '{0} is not a primary key \n'.format(c.getLabel())
                     hasprimary = True

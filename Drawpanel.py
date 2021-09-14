@@ -13,19 +13,6 @@ scale = 1
 
 def scale(my_canvas, spinbox):
     my_canvas.delete("all")
-    sElements, cElements = myParser.parse(Files[1], Files[0], writer)
-    num = spinbox.get()
-    minX, minY, maxX, maxY = myParser.getMinMax(sElements)
-    myParser.normaliseCoordinates(sElements, minX, minY, maxX, maxY)
-    myParser.scaleCoordinates(sElements, num)
-    Drawer.drawER(my_canvas, sElements)
-
-
-def drawH(my_canvas, sElements):
-    my_canvas.delete("all")
-    minX, minY, maxX, maxY = myParser.getMinMax(sElements)
-    myParser.normaliseCoordinates(sElements, minX, minY, maxX, maxY)
-    Drawer.drawER(my_canvas, sElements)
 
 
 def openCorrectFile():
@@ -40,15 +27,20 @@ def openStudentFile():
         Files.insert(1, file)
 
 
-def correct(my_canvas, t):
+def correct(my_canvas, t, spinbox):
     t.delete(1.0, END)
     writer = []
     print(Files[0])
     print(Files[1])
-    if Files[0] != 0:
+    if Files[0] != 0 and Files[1] != 0:
+        my_canvas.delete("all")
         sElements, cElements = myParser.parse(Files[1], Files[0], writer)
         myParser.correct(sElements, cElements, writer)
-        drawH(my_canvas, sElements)
+        minX, minY, maxX, maxY = myParser.getMinMax(sElements)
+        myParser.normaliseCoordinates(sElements, minX, minY, maxX, maxY)
+        num = float(spinbox.get())/100
+        myParser.scaleCoordinates(sElements, num)
+        Drawer.drawER(my_canvas, sElements)
     t.insert(1.0, writer)
 
 
@@ -86,13 +78,13 @@ class Main(Frame):
         s = Scrollbar(self)
         t.config(yscrollcommand=s.set)
 
-        spinbox = Spinbox(self, from_=1, to=100, width=15, textvariable=scale)
+        spinbox = Spinbox(self, from_=100, to=250, width=15, textvariable=scale)
         spinbox.grid(row=5, column=3)
 
         scalebtn = Button(self, text='Scale', command=lambda: scale(my_canvas, spinbox))
         scalebtn.grid(row=4, column=3)
 
-        correctbtn = Button(self, text="Correct", command=lambda: correct(my_canvas, t))
+        correctbtn = Button(self, text="Correct", command=lambda: correct(my_canvas, t, spinbox))
         correctbtn.grid(row=3, column=3)
 
 

@@ -72,8 +72,12 @@ def getMinMax(sElements):
 
 
 def normaliseCoordinates(sElements, minX, minY, maxX, maxY):
+    if(minX < 0):
+        maxX = abs(minX)+abs(maxX)
+    if(minY < 0):
+        maxY = abs(minY)+abs(maxY)
     multX = 1540 / maxX
-    multY = 660 / maxY
+    multY = 680 / maxY
     for i in sElements:
         if (type(i) == model.Edge):
             continue
