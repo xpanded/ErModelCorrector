@@ -38,16 +38,17 @@ def parse(xmlfile, correctfile, out):
         if (sort == 'node'):
             model.createNode(y, sElements)
 
- #   model.printall(alElements)
-  #  model.printall(cElements)
+    #   model.printall(alElements)
+    #  model.printall(cElements)
 
     return sElements, cElements
+
 
 def correct(alElements, cElements, out):
     Corrector.checkAttributes(alElements, cElements, out)
     Corrector.checkClasses(alElements, cElements, out)
     Corrector.checkRelationCardinality(alElements, cElements, out)
-    Corrector.checkIsRelation(alElements, out)
+   # Corrector.checkIsRelation(alElements, out)
 
 
 def getMinMax(sElements):
@@ -72,10 +73,10 @@ def getMinMax(sElements):
 
 
 def normaliseCoordinates(sElements, minX, minY, maxX, maxY):
-    if(minX < 0):
-        maxX = abs(minX)+abs(maxX)
-    if(minY < 0):
-        maxY = abs(minY)+abs(maxY)
+    if (minX < 0):
+        maxX = abs(minX) + abs(maxX)
+    if (minY < 0):
+        maxY = abs(minY) + abs(maxY)
     multX = 1540 / maxX
     multY = 680 / maxY
     for i in sElements:

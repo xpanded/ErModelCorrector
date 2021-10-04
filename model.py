@@ -165,9 +165,9 @@ def createEdge(x, list):
         j = j + 1
 
     allarrows = res[j + 1]
-    if ('source="standard' in allarrows):
+    if ('source="standard' in allarrows or 'source="delta' in allarrows):
         nline.setArrowSource(True)
-    if ('target="standard' in allarrows):
+    if ('target="standard' in allarrows or 'target="delta' in allarrows):
         nline.setArrowTarget(True)
 
     if (type(source) == Node and type(target) == Attribute):

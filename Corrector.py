@@ -2,6 +2,8 @@ import model
 import re
 import Levenshtein as lev
 
+tertary = []
+
 
 def checkAttributes(graph, correct, out):
     for i in graph:
@@ -15,7 +17,7 @@ def checkAttributes(graph, correct, out):
 
 def getCorrectAttributes(nodename, correct):
     for y in correct:
-        if (y.getLabel() == nodename):
+        if (y.getLabel() == nodename and type(y) == model.Node):
             return y.getAttributes()
 
 
@@ -34,7 +36,7 @@ def controllIfMissing(nodeAttributes, correctAttributes, nodename, out):
     for c in correctAttributes:
         for n in nodeAttributes:
             ratio = lev.ratio(c.getLabel().upper(), n.getLabel().upper())
-            if (c.getLabel() == n.getLabel() or ratio > 0.8):
+            if (c.getLabel() == n.getLabel() or ratio > 0.75):
                 if (c.getPrimary() != n.getPrimary() and hasprimary == False):
                     temp = '{0} is not a primary key \n'.format(c.getLabel())
                     hasprimary = True
@@ -52,11 +54,13 @@ def checkClasses(graph, correct, out):
     for c in correct:
         for i in graph:
             if (type(i) == model.Node and type(c) == model.Node):
-                if (i.getLabel() == c.getLabel()):
+                ratio = lev.ratio(c.getLabel().upper(), i.getLabel().upper())
+                if (i.getLabel() == c.getLabel() or ratio>0.75):
                     found = True
                 # print('class found', c.getLabel())
             if (type(i) == model.Relation and type(c) == model.Relation):
-                if (i.getLabel() == c.getLabel()):
+                ratio = lev.ratio(c.getLabel().upper(), i.getLabel().upper())
+                if (i.getLabel() == c.getLabel() or ratio >0.75):
                     found = True
                 # print('relation found', c.getLabel())
         if (found == False and type(c) == model.Node):
@@ -104,7 +108,7 @@ def checkCarnality(relation, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality
                                                                                                  g1Cardinality,
                                                                                                  c1Cardinality))
         edge = getEdgeBetweenNodeAndRelation(graph, g1, relation)
-        edge.setColor('cyan')
+        edge.setColor('red')
     if (g2Cardinality != c2Cardinality):
         print('wrong cardinality for {0} related to {1} is {2} instead of {3}'.format(relation.getLabel(),
                                                                                       g2.getLabel(),
@@ -115,7 +119,7 @@ def checkCarnality(relation, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality
                                                                                               g2Cardinality,
                                                                                               c2Cardinality))
         edge = getEdgeBetweenNodeAndRelation(graph, g2, relation)
-        edge.setColor('cyan')
+        edge.setColor('red')
 
 
 def checkIsRelation(graph, out):
@@ -127,20 +131,21 @@ def checkIsRelation(graph, out):
                         continue
                 else:
                     out.append('{} is not a related to an IS relation'.format(i.getSource().getLabel()))
-                    i.setColor('cyan')
+                    i.setColor('red')
             elif (i.getArrowTarget() == True):
                 if (type(i.getSource()) == model.Relation):
                     if (i.getSource().getLabel().upper() == 'IST' or i.getSource().getLabel().upper() == 'IS'):
                         continue
                 else:
                     out.append('{} is not a related to an IS relation'.format(i.getTarget().getLabel()))
-                    i.setColor('cyan')
+                    i.setColor('red')
 
 
 def getNodesFromRelation(graph, relation, out):
     edgeList = getEdgesFromRelation(graph, relation)
-    if (len(edgeList) == 3):
+    if (len(edgeList) == 3 and relation not in tertary):
         relation.setColor('red')
+        tertary.append(relation)
         out.append('{0} is a ternary realtionship \n'.format(relation.getLabel()))
     if (edgeList[0] is not None and edgeList[1] is not None):
         e1, e2 = edgeList[0], edgeList[1]

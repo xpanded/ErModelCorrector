@@ -11,10 +11,6 @@ writer = []
 scale = 1
 
 
-def scale(my_canvas, spinbox):
-    my_canvas.delete("all")
-
-
 def openCorrectFile():
     file = askopenfilename(title='Choose GraphML', filetype=[("GraphML File", "*.graphml")])
     if file:
@@ -81,8 +77,8 @@ class Main(Frame):
         spinbox = Spinbox(self, from_=100, to=250, width=15, textvariable=scale)
         spinbox.grid(row=5, column=3)
 
-        scalebtn = Button(self, text='Scale', command=lambda: scale(my_canvas, spinbox))
-        scalebtn.grid(row=4, column=3)
+        scalelbl = Label(self, text="Insert Zoom in %")
+        scalelbl.grid(row=4, column=3)
 
         correctbtn = Button(self, text="Correct", command=lambda: correct(my_canvas, t, spinbox))
         correctbtn.grid(row=3, column=3)
