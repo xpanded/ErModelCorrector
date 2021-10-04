@@ -79,26 +79,15 @@ def helperArrow(my_canvas, edge, target):
     elif (m == 0 and x1 > x2):
         xm = x1 - 50
         my_canvas.create_line(xm + 20, ym + 20, x2 + 20, y2 + 20, fill=edge.getColor(), arrow='first')
-    elif (m > 0):
+    else:
         if (x1 > x2):
             while (calculateDisctance(x2, y2, xm, ym) < 50):
-                xm = xm * 1.01
+                xm = xm * 1.001
                 ym = m * xm + p
             my_canvas.create_line(xm + 20, ym + 20, x2 + 20, y2 + 20, fill=edge.getColor(), arrow='first')
         else:
             while (calculateDisctance(x2, y2, xm, ym) < 50):
-                xm = xm * 0.99
-                ym = m * xm + p
-            my_canvas.create_line(xm + 20, ym + 20, x2 + 20, y2 + 20, fill=edge.getColor(), arrow='first')
-    elif (m < 0):
-        if (x1 > x2):
-            while (calculateDisctance(x2, y2, xm, ym) < 50):
-                xm = xm * 1.01
-                ym = m * xm + p
-            my_canvas.create_line(xm + 20, ym + 20, x2 + 20, y2 + 20, fill=edge.getColor(), arrow='first')
-        else:
-            while (calculateDisctance(x2, y2, xm, ym) < 50):
-                xm = xm * 0.99
+                xm = xm * 0.999
                 ym = m * xm + p
             my_canvas.create_line(xm + 20, ym + 20, x2 + 20, y2 + 20, fill=edge.getColor(), arrow='first')
 
