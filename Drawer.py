@@ -13,10 +13,9 @@ def drawAttribute(my_canvas, attribute):
     text = attribute.getLabel()
     underline = attribute.getPrimary()
     my_canvas.create_oval(x, y, x + 86, y + 30, fill='#ccffff')
+    my_canvas.create_text(x + 10, y + 9, text=text, anchor='nw')
     if (underline):
-        my_canvas.create_text(x + 10, y + 9, text=text, anchor='nw', fill='blue')
-    else:
-        my_canvas.create_text(x + 10, y + 9, text=text, anchor='nw')
+        my_canvas.create_line(x + 8, y + 22, x + 78, y+22, fill='black')
 
 
 def drawRelation(my_canvas, relation):
