@@ -7,7 +7,7 @@ tertary = []
 
 def checkAttributes(graph, correct, out):
     for i in graph:
-        if (type(i) == model.Node):
+        if (type(i) == model.Entity):
             nodeAttributes = i.getAttributes()
             nodename = i.getLabel()
             correctAttributes = getCorrectAttributes(nodename, correct)
@@ -17,7 +17,7 @@ def checkAttributes(graph, correct, out):
 
 def getCorrectAttributes(nodename, correct):
     for y in correct:
-        if (y.getLabel() == nodename and type(y) == model.Node):
+        if (y.getLabel() == nodename and type(y) == model.Entity):
             return y.getAttributes()
 
 
@@ -49,11 +49,11 @@ def controllIfMissing(nodeAttributes, correctAttributes, nodename, out):
         found = False
 
 
-def checkClasses(graph, correct, out):
+def checkEntities(graph, correct, out):
     found = False
     for c in correct:
         for i in graph:
-            if (type(i) == model.Node and type(c) == model.Node):
+            if (type(i) == model.Entity and type(c) == model.Entity):
                 ratio = lev.ratio(c.getLabel().upper(), i.getLabel().upper())
                 if (i.getLabel() == c.getLabel() or ratio>0.75):
                     found = True
@@ -63,8 +63,8 @@ def checkClasses(graph, correct, out):
                 if (i.getLabel() == c.getLabel() or ratio >0.75):
                     found = True
                 # print('relation found', c.getLabel())
-        if (found == False and type(c) == model.Node):
-            txt = 'class missing ' + str(c.getLabel()) + '\n'
+        if (found == False and type(c) == model.Entity):
+            txt = 'entity missing ' + str(c.getLabel()) + '\n'
             print(txt)
             out.append(txt)
         if (found == False and type(c) == model.Relation):
@@ -78,10 +78,10 @@ def checkRelationCardinality(graph, correct, out):
     for c in correct:
         for g in graph:
             if (type(c) == model.Relation and type(g) == model.Relation):
-                c1, c2 = getNodesFromRelation(correct, c, out)
+                c1, c2 = getEntitiesFromRelation(correct, c, out)
                 c1Cardinality = getCardinalityFromEdge(correct, c1, c)
                 c2Cardinality = getCardinalityFromEdge(correct, c2, c)
-                g1, g2 = getNodesFromRelation(graph, g, out)
+                g1, g2 = getEntitiesFromRelation(graph, g, out)
                 if (c1Cardinality != '' and c2Cardinality != ''):
                     if (g1.getLabel() == c1.getLabel()) and (g2.getLabel() == c2.getLabel()):
                         g1Cardinality = getCardinalityFromEdge(graph, g1, g)
@@ -107,7 +107,7 @@ def checkCarnality(relation, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality
                                                                                                  g1.getLabel(),
                                                                                                  g1Cardinality,
                                                                                                  c1Cardinality))
-        edge = getEdgeBetweenNodeAndRelation(graph, g1, relation)
+        edge = getEdgeBetweenEntityAndRelation(graph, g1, relation)
         edge.setColor('red')
     if (g2Cardinality != c2Cardinality):
         print('wrong cardinality for {0} related to {1} is {2} instead of {3}'.format(relation.getLabel(),
@@ -118,7 +118,7 @@ def checkCarnality(relation, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality
                                                                                               g2.getLabel(),
                                                                                               g2Cardinality,
                                                                                               c2Cardinality))
-        edge = getEdgeBetweenNodeAndRelation(graph, g2, relation)
+        edge = getEdgeBetweenEntityAndRelation(graph, g2, relation)
         edge.setColor('red')
 
 
@@ -141,7 +141,7 @@ def checkIsRelation(graph, out):
                     i.setColor('red')
 
 
-def getNodesFromRelation(graph, relation, out):
+def getEntitiesFromRelation(graph, relation, out):
     edgeList = getEdgesFromRelation(graph, relation)
     if (len(edgeList) == 3 and relation not in tertary):
         relation.setColor('red')
@@ -151,13 +151,13 @@ def getNodesFromRelation(graph, relation, out):
         e1, e2 = edgeList[0], edgeList[1]
         n1 = 0
         n2 = 0
-        if (type(e1.getTarget()) == model.Node):
+        if (type(e1.getTarget()) == model.Entity):
             n1 = e1.getTarget()
-        if (type(e1.getSource()) == model.Node):
+        if (type(e1.getSource()) == model.Entity):
             n1 = e1.getSource()
-        if (type(e2.getTarget()) == model.Node):
+        if (type(e2.getTarget()) == model.Entity):
             n2 = e2.getTarget()
-        if (type(e2.getSource()) == model.Node):
+        if (type(e2.getSource()) == model.Entity):
             n2 = e2.getSource()
         return n1, n2
 
@@ -166,8 +166,8 @@ def getEdgesFromRelation(graph, relation):
     alresult = []
     for i in graph:
         if (type(i) == model.Edge):
-            if (i.getTarget() == relation and type(i.getSource()) == model.Node) or (
-                    i.getSource() == relation and type(i.getTarget()) == model.Node):
+            if (i.getTarget() == relation and type(i.getSource()) == model.Entity) or (
+                    i.getSource() == relation and type(i.getTarget()) == model.Entity):
                 alresult.append(i)
     if (alresult[0] is not None and alresult[1] is not None):
         return alresult
@@ -184,7 +184,7 @@ def getCardinalityFromEdge(graph, n1, n2):
                 return label
 
 
-def getEdgeBetweenNodeAndRelation(graph, node, r):
+def getEdgeBetweenEntityAndRelation(graph, node, r):
     for i in graph:
         if (type(i) == model.Edge):
             if (i.getTarget() == node and i.getSource() == r) or (

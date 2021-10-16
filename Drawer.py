@@ -1,7 +1,7 @@
 import model
 
 
-def drawNode(my_canvas, attribute):
+def drawEntity(my_canvas, attribute):
     x, y = attribute.getCoordinates()
     text = attribute.getLabel()
     my_canvas.create_rectangle(x, y, x + 75, y + 20, fill='#ccffff')
@@ -47,8 +47,8 @@ def drawEdge(my_canvas, edge):
 
 def drawER(my_canvas, alElements):
     for i in reversed(alElements):
-        if (type(i) == model.Node):
-            drawNode(my_canvas, i)
+        if (type(i) == model.Entity):
+            drawEntity(my_canvas, i)
         elif (type(i) == model.Attribute):
             drawAttribute(my_canvas, i)
         elif (type(i) == model.Relation):

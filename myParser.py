@@ -24,7 +24,7 @@ def parse(xmlfile, correctfile, out):
         if (sort == 'edge'):
             model.createEdge(y, cElements)
         if (sort == 'node'):
-            model.createNode(y, cElements)
+            model.createEntity(y, cElements)
 
     i = 0
     sElements = []
@@ -36,17 +36,15 @@ def parse(xmlfile, correctfile, out):
         if (sort == 'edge'):
             model.createEdge(y, sElements)
         if (sort == 'node'):
-            model.createNode(y, sElements)
+            model.createEntity(y, sElements)
 
-    #   model.printall(alElements)
-    #  model.printall(cElements)
 
     return sElements, cElements
 
 
 def correct(alElements, cElements, out):
     Corrector.checkAttributes(alElements, cElements, out)
-    Corrector.checkClasses(alElements, cElements, out)
+    Corrector.checkEntities(alElements, cElements, out)
     Corrector.checkRelationCardinality(alElements, cElements, out)
    # Corrector.checkIsRelation(alElements, out)
 

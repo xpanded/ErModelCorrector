@@ -1,7 +1,5 @@
-from tkinter import ttk
-import tkinter
-from tkinter.filedialog import askopenfilename
 from tkinter import *
+from tkinter.filedialog import askopenfilename
 
 import myParser
 import Drawer

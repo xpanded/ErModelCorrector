@@ -40,7 +40,7 @@ class Edge:
         return self.arrowTarget
 
 
-class Node:
+class Entity:
 
     def __init__(self, nid, label, x, y):
         self.nid = nid
@@ -145,14 +145,16 @@ def createEdge(x, list):
     ssource = ssource[8:-1]
     starget = mains[5]
     starget = starget[8:-2]
+    slabel = ''
     i = 2
 
     while ('key=' in res[i]):
         i = i + 1
 
-    slabels = res[i + 4].split('>')
-    slabel = slabels[1]
-    slabel = slabel.split('<')[0]
+    if ('EdgeLabel' in res[i + 4]):
+        slabels = res[i + 4].split('>')
+        slabel = slabels[1]
+        slabel = slabel.split('<')[0]
 
     source = findInList(ssource, list)
     target = findInList(starget, list)
@@ -160,7 +162,7 @@ def createEdge(x, list):
     nline = Edge(sid, source, target)
     nline.setLabel(slabel)
 
-    j = i+1
+    j = i + 1
     while ('Path' in res[j] or 'Point' in res[j]):
         j = j + 1
 
@@ -170,9 +172,9 @@ def createEdge(x, list):
     if ('target="standard' in allarrows or 'target="delta' in allarrows):
         nline.setArrowTarget(True)
 
-    if (type(source) == Node and type(target) == Attribute):
+    if (type(source) == Entity and type(target) == Attribute):
         source.addAttribute(target)
-    if (type(target) == Node and type(source) == Attribute):
+    if (type(target) == Entity and type(source) == Attribute):
         target.addAttribute(source)
     if (type(source) == Relation and type(target) == Attribute):
         source.addAttribute(target)
@@ -181,42 +183,42 @@ def createEdge(x, list):
     list.append(nline)
 
 
-def createNode(nx, list):
+def createEntity(nx, list):
     res = nx.split('\\n')
     mains = res[0].split(' ')
     nid = mains[3]
     nid = nid[4:-2]
+    i = 2
+    nlabel = ''
 
-    if ('key=' in res[2]):
-        nlabels = res[7].split('>')
-        ngeo = res[4].split('=')
-    else:
-        nlabels = res[6].split('>')
-        ngeo = res[3].split('=')
-    nlabel = nlabels[1]
-    nlabel = nlabel.split('<')[0]
+    while ('key=' in res[i]):
+        i = i + 1
 
-    x = ngeo[3][1:-3]
-    y = ngeo[4][1:-4]
+    if ('NodeLabel' in res[i + 4]):
+        nlabels = res[i + 4].split('>')
+        ngeo = res[i + 1].split('=')
+        nlabel = nlabels[1]
+        nlabel = nlabel.split('<')[0]
 
-    nodetype = res[2]
-    if ('key' in nodetype):
-        nodetype = res[3]
+        x = ngeo[3][1:-3]
+        y = ngeo[4][1:-4]
 
-    if ('small_entity' in nodetype):
-        print('entity')  # test
-    if ('.relationship' in nodetype):
+    entityType = res[2]
+    if ('key' in entityType):
+        entityType = res[3]
+
+    if ('.relationship' in entityType):
         createRelation(nid, nlabel, list, x, y)
         return
-    if ('attribute' in nodetype):
+    if ('attribute' in entityType):
         primary = False
         if ('''underlinedText="true"''' in nlabels[0]):
             primary = True
         createAttribute(nid, nlabel, primary, list, x, y)
         return
 
-    node = Node(nid, nlabel, x, y)
-    list.append(node)
+    entity = Entity(nid, nlabel, x, y)
+    list.append(entity)
 
 
 def createRelation(rid, rlabel, list, x, y):
