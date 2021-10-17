@@ -1,45 +1,3 @@
-class Edge:
-
-    def __init__(self, lid, source, target):
-        self.lid = lid
-        self.source = source
-        self.target = target
-        self.label = ''
-        self.color = 'black'
-        self.arrowSource = False
-        self.arrowTarget = False
-
-    def setLabel(self, label):
-        self.label = label
-
-    def getLabel(self):
-        return self.label
-
-    def getSource(self):
-        return self.source
-
-    def getTarget(self):
-        return self.target
-
-    def setColor(self, color):
-        self.color = color
-
-    def getColor(self):
-        return self.color
-
-    def setArrowSource(self, arrow):
-        self.arrowSource = arrow
-
-    def getArrowSource(self):
-        return self.arrowSource
-
-    def setArrowTarget(self, arrow):
-        self.arrowTarget = arrow
-
-    def getArrowTarget(self):
-        return self.arrowTarget
-
-
 class Entity:
 
     def __init__(self, nid, label, x, y):
@@ -112,6 +70,7 @@ class Attribute:
         self.primary = primary
         self.x = x
         self.y = y
+        self.color = 'black'
 
     def getId(self):
         return self.nid
@@ -119,21 +78,69 @@ class Attribute:
     def getLabel(self):
         return self.label
 
-    def getCoordinates(self):
-        return self.x, self.y
-
     def setCoordinates(self, x, y):
         self.x = x
         self.y = y
 
+    def getCoordinates(self):
+        return self.x, self.y
+
     def getPrimary(self):
         return self.primary
+
+    def setColor(self, color):
+        self.color = color
+
+    def getColor(self):
+        return self.color
 
 
 def findInList(nid, list):
     for i in list:
         if (i.getId() == nid):
             return i
+
+
+class Edge:
+
+    def __init__(self, lid, source, target):
+        self.lid = lid
+        self.source = source
+        self.target = target
+        self.label = ''
+        self.color = 'black'
+        self.arrowSource = False
+        self.arrowTarget = False
+
+    def setLabel(self, label):
+        self.label = label
+
+    def getLabel(self):
+        return self.label
+
+    def getSource(self):
+        return self.source
+
+    def getTarget(self):
+        return self.target
+
+    def setColor(self, color):
+        self.color = color
+
+    def getColor(self):
+        return self.color
+
+    def setArrowSource(self, arrow):
+        self.arrowSource = arrow
+
+    def getArrowSource(self):
+        return self.arrowSource
+
+    def setArrowTarget(self, arrow):
+        self.arrowTarget = arrow
+
+    def getArrowTarget(self):
+        return self.arrowTarget
 
 
 def createEdge(x, list):
