@@ -31,9 +31,10 @@ def controllIfMissing(nodeAttributes, correctAttributes, nodename, out):
     elif (len(nodeAttributes) < len(correctAttributes)):
         print('attributes missing')
 
-    found = False
+
     hasprimary = False
     for c in correctAttributes:
+        found = False
         for n in nodeAttributes:
             ratio = lev.ratio(c.getLabel().upper(), n.getLabel().upper())
             if (c.getLabel() == n.getLabel() or ratio > 0.75):
@@ -46,32 +47,25 @@ def controllIfMissing(nodeAttributes, correctAttributes, nodename, out):
         if (found == False):
             print('attribute missing {0} for entity {1}'.format(c.getLabel(), nodename))
             out.append('attribute missing {0} for entity {1} \n'.format(c.getLabel(), nodename))
-        found = False
 
 
 def checkEntities(graph, correct, out):
-    found = False
     for c in correct:
+        found = False
         for i in graph:
-            if (type(i) == model.Entity and type(c) == model.Entity):
+            if (type(i) == model.Entity and type(c) == model.Entity or (
+                    type(i) == model.Relation and type(c) == model.Relation)):
                 ratio = lev.ratio(c.getLabel().upper(), i.getLabel().upper())
-                if (i.getLabel() == c.getLabel() or ratio>0.75):
+                if (ratio > 0.75):
                     found = True
-                # print('class found', c.getLabel())
-            if (type(i) == model.Relation and type(c) == model.Relation):
-                ratio = lev.ratio(c.getLabel().upper(), i.getLabel().upper())
-                if (i.getLabel() == c.getLabel() or ratio >0.75):
-                    found = True
-                # print('relation found', c.getLabel())
         if (found == False and type(c) == model.Entity):
             txt = 'entity missing ' + str(c.getLabel()) + '\n'
-            print(txt)
             out.append(txt)
-        if (found == False and type(c) == model.Relation):
+        if (found == False and type(c) == model.Relation and (
+                c.getLabel().upper() != 'IST' and c.getLabel().upper() != 'IS')):
             txt = 'relationship missing ' + str(c.getLabel()) + '\n'
-            print(txt)
             out.append(txt)
-        found = False
+
 
 
 def checkRelationCardinality(graph, correct, out):

@@ -43,8 +43,8 @@ def parse(xmlfile, correctfile, out):
 
 
 def correct(alElements, cElements, out):
-    Corrector.checkAttributes(alElements, cElements, out)
     Corrector.checkEntities(alElements, cElements, out)
+    Corrector.checkAttributes(alElements, cElements, out)
     Corrector.checkRelationCardinality(alElements, cElements, out)
    # Corrector.checkIsRelation(alElements, out)
 
