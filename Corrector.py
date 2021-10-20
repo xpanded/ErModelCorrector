@@ -5,54 +5,50 @@ import Levenshtein as lev
 tertary = []
 
 
-def checkAttributes(graph, correct, out):
-    for i in graph:
+def checkAttributes(studentGraph, modelGraph, out):
+    for i in studentGraph:
         if (type(i) == model.Entity):
-            nodeAttributes = i.getAttributes()
-            nodename = i.getLabel()
-            correctAttributes = getCorrectAttributes(nodename, correct)
-            if (correctAttributes is not None):
-                controllIfMissing(nodeAttributes, correctAttributes, nodename, out)
+            studentAttributes = i.getAttributes()
+            nodeName = i.getLabel()
+            modelAttributes = getCorrectAttributes(nodeName, modelGraph)
+            if (modelAttributes is not None):
+                controllIfMissing(studentAttributes, modelAttributes, nodeName, out)
 
 
-def getCorrectAttributes(nodename, correct):
-    for y in correct:
-        if (y.getLabel() == nodename and type(y) == model.Entity):
+def getCorrectAttributes(nodeName, modelGraph):
+    for y in modelGraph:
+        if (y.getLabel() == nodeName and type(y) == model.Entity):
             return y.getAttributes()
 
 
-def controllIfMissing(nodeAttributes, correctAttributes, nodename, out):
-    if (type(nodeAttributes) is None) or (type(correctAttributes) is None):
+def controllIfMissing(studentAttributes, modelAttributes, nodeName, out):
+    if (type(studentAttributes) is None) or (type(modelAttributes) is None):
         return
-    if (len(nodeAttributes) > len(correctAttributes)):
-        print('too many attributes')
+    if (len(studentAttributes) > len(modelAttributes)):
         out += 'too many attributes \n'
-
-    elif (len(nodeAttributes) < len(correctAttributes)):
-        print('attributes missing')
-
-
-    hasprimary = False
-    for c in correctAttributes:
+    # hasPrimary = False
+    for c in modelAttributes:
         found = False
-        for n in nodeAttributes:
+        for n in studentAttributes:
             ratio = lev.ratio(c.getLabel().upper(), n.getLabel().upper())
-            if (c.getLabel() == n.getLabel() or ratio > 0.75):
-                if (c.getPrimary() != n.getPrimary() and hasprimary == False):
-                    temp = '{0} is not a primary key \n'.format(c.getLabel())
-                    hasprimary = True
+            if (ratio > 0.75):
+                if (c.getPrimary() != n.getPrimary()):  # and hasPrimary == False
+                    if (c.getPrimary()):
+                        temp = '{0} is a primary key \n'.format(c.getLabel())
+                    else:
+                        temp = '{0} is not a primary key \n'.format(c.getLabel())
+                    # hasPrimary = True
                     print(temp)
                     out.append(temp)
-                found = True
+            found = True
         if (found == False):
-            print('attribute missing {0} for entity {1}'.format(c.getLabel(), nodename))
-            out.append('attribute missing {0} for entity {1} \n'.format(c.getLabel(), nodename))
+            out.append('attribute missing {0} for entity {1} \n'.format(c.getLabel(), nodeName))
 
 
-def checkEntities(graph, correct, out):
-    for c in correct:
+def checkEntities(studentGraph, modelGraph, out):
+    for c in modelGraph:
         found = False
-        for i in graph:
+        for i in studentGraph:
             if (type(i) == model.Entity and type(c) == model.Entity or (
                     type(i) == model.Relation and type(c) == model.Relation)):
                 ratio = lev.ratio(c.getLabel().upper(), i.getLabel().upper())
@@ -67,36 +63,40 @@ def checkEntities(graph, correct, out):
             out.append(txt)
 
 
-
-def checkRelationCardinality(graph, correct, out):
-    for c in correct:
-        for g in graph:
-            if (type(c) == model.Relation and type(g) == model.Relation):
-                c1, c2 = getEntitiesFromRelation(correct, c, out)
-                c1Cardinality = getCardinalityFromEdge(correct, c1, c)
-                c2Cardinality = getCardinalityFromEdge(correct, c2, c)
-                g1, g2 = getEntitiesFromRelation(graph, g, out)
-                if (c1Cardinality != '' and c2Cardinality != ''):
-                    if (g1.getLabel() == c1.getLabel()) and (g2.getLabel() == c2.getLabel()):
-                        g1Cardinality = getCardinalityFromEdge(graph, g1, g)
-                        g2Cardinality = getCardinalityFromEdge(graph, g2, g)
-                        checkCarnality(g, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out,
-                                       graph)
-                    if (g2.getLabel() == c1.getLabel()) and (g1.getLabel() == c2.getLabel()):
-                        g1Cardinality = getCardinalityFromEdge(graph, g2, g)
-                        g2Cardinality = getCardinalityFromEdge(graph, g1, g)
-                        checkCarnality(g, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out,
-                                       graph)
+def checkRelationCardinality(studentGraph, modelGraph, out):
+    for c in modelGraph:
+        for i in studentGraph:
+            if (type(c) == model.Relation and type(i) == model.Relation):
+                if (checkTernary(studentGraph, i, out) == False):
+                    c1, c2 = getEntitiesFromRelation(modelGraph, c, out)
+                    c1Cardinality = getCardinalityFromEdge(modelGraph, c1, c)
+                    c2Cardinality = getCardinalityFromEdge(modelGraph, c2, c)
+                    i1, i2 = getEntitiesFromRelation(studentGraph, i, out)
+                    if (c1Cardinality != '' and c2Cardinality != ''):
+                        ratio1 = lev.ratio(c1.getLabel().upper(), i1.getLabel().upper())
+                        ratio2 = lev.ratio(c2.getLabel().upper(), i2.getLabel().upper())
+                        ratio3 = lev.ratio(c1.getLabel().upper(), i2.getLabel().upper())
+                        ratio4 = lev.ratio(c2.getLabel().upper(), i1.getLabel().upper())
+                        if (ratio1 > 0.75 and ratio2 > 0.75):
+                            g1Cardinality = getCardinalityFromEdge(studentGraph, i1, i)
+                            g2Cardinality = getCardinalityFromEdge(studentGraph, i2, i)
+                            checkCarnality(i, i1, i2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out,
+                                           studentGraph)
+                        if (ratio3 > 0.75 and ratio4 > 0.75):
+                            g1Cardinality = getCardinalityFromEdge(studentGraph, i2, i)
+                            g2Cardinality = getCardinalityFromEdge(studentGraph, i1, i)
+                            checkCarnality(i, i1, i2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out,
+                                           studentGraph)
 
 
 def checkCarnality(relation, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality, c2Cardinality, out, graph):
-    # if (g1Cardinality == c1Cardinality and g2Cardinality == c2Cardinality):
-    #   print('right cardinalities for ', c.getLabel())
+    if (g1Cardinality == '[1,1]' and g2Cardinality == '[1,1]'):
+        out.append('Relationship {0} superfluous two times {1} !    \n'.format(relation.getLabel(), g2Cardinality))
+        edge = getEdgeBetweenEntityAndRelation(graph, g1, relation)
+        edge.setColor('red')
+        edge = getEdgeBetweenEntityAndRelation(graph, g2, relation)
+        edge.setColor('red')
     if (g1Cardinality != c1Cardinality):
-        print('wrong cardinality for {0} related to {1} is {2} but should be {3}'.format(relation.getLabel(),
-                                                                                         g1.getLabel(),
-                                                                                         g1Cardinality,
-                                                                                         c1Cardinality))
         out.append('wrong cardinality for {0} related to {1} is {2} but should be {3} \n'.format(relation.getLabel(),
                                                                                                  g1.getLabel(),
                                                                                                  g1Cardinality,
@@ -104,10 +104,6 @@ def checkCarnality(relation, g1, g2, g1Cardinality, g2Cardinality, c1Cardinality
         edge = getEdgeBetweenEntityAndRelation(graph, g1, relation)
         edge.setColor('red')
     if (g2Cardinality != c2Cardinality):
-        print('wrong cardinality for {0} related to {1} is {2} instead of {3}'.format(relation.getLabel(),
-                                                                                      g2.getLabel(),
-                                                                                      g2Cardinality,
-                                                                                      c2Cardinality))
         out.append('wrong cardinality for {0} related to {1} is {2} instead of {3} \n'.format(relation.getLabel(),
                                                                                               g2.getLabel(),
                                                                                               g2Cardinality,
@@ -135,12 +131,18 @@ def checkIsRelation(graph, out):
                     i.setColor('red')
 
 
-def getEntitiesFromRelation(graph, relation, out):
+def checkTernary(graph, relation, out):
     edgeList = getEdgesFromRelation(graph, relation)
     if (len(edgeList) == 3 and relation not in tertary):
         relation.setColor('red')
         tertary.append(relation)
         out.append('{0} is a ternary realtionship \n'.format(relation.getLabel()))
+        return True
+    return False
+
+
+def getEntitiesFromRelation(graph, relation, out):
+    edgeList = getEdgesFromRelation(graph, relation)
     if (edgeList[0] is not None and edgeList[1] is not None):
         e1, e2 = edgeList[0], edgeList[1]
         n1 = 0

@@ -18,7 +18,7 @@ def parse(xmlfile, correctfile, out):
     cElements = []
     for x in croot.findall('./gr:graph/', ns):
         text = x.tag.__str__()
-        sort = text[39:]  # 39 for the prefix ardess
+        sort = text[39:]  # 39 for the prefix adress
         y = ET.tostring(x)
         y = str(y)
         if (sort == 'edge'):
@@ -27,34 +27,35 @@ def parse(xmlfile, correctfile, out):
             model.createEntity(y, cElements)
 
     i = 0
-    sElements = []
+    studentGraph = []
     for x in root.findall('./gr:graph/', ns):
         text = x.tag.__str__()
-        sort = text[39:]  # 39 for the prefix ardess
+        sort = text[39:]  # 39 for the prefix adress
         y = ET.tostring(x)
         y = str(y)
         if (sort == 'edge'):
-            model.createEdge(y, sElements)
+            model.createEdge(y, studentGraph)
         if (sort == 'node'):
-            model.createEntity(y, sElements)
+            model.createEntity(y, studentGraph)
 
-
-    return sElements, cElements
+    return studentGraph, cElements
 
 
 def correct(alElements, cElements, out):
     Corrector.checkEntities(alElements, cElements, out)
     Corrector.checkAttributes(alElements, cElements, out)
     Corrector.checkRelationCardinality(alElements, cElements, out)
-   # Corrector.checkIsRelation(alElements, out)
 
 
-def getMinMax(sElements):
+# Corrector.checkIsRelation(alElements, out)
+
+
+def getMinMax(studentGraph):
     minX = 0
     minY = 0
     maxX = 0
     maxY = 0
-    for i in sElements:
+    for i in studentGraph:
         if (type(i) == model.Edge):
             continue
         else:
@@ -70,25 +71,27 @@ def getMinMax(sElements):
     return minX, minY, maxX, maxY
 
 
-def normaliseCoordinates(sElements, minX, minY, maxX, maxY):
+def normaliseCoordinates(studentGraph, minX, minY, maxX, maxY):
+    canvasWidth = 1540/1.2
+    canvasHeight = 680/1.2
     if (minX < 0):
         maxX = abs(minX) + abs(maxX)
     if (minY < 0):
         maxY = abs(minY) + abs(maxY)
-    multX = 1540 / maxX
-    multY = 680 / maxY
-    for i in sElements:
+    multX = canvasWidth / maxX
+    multY = canvasHeight / maxY
+    for i in studentGraph:
         if (type(i) == model.Edge):
             continue
         else:
             x, y = i.getCoordinates()
-            x = (int(float(x)) - minX) * multX / 2
-            y = (int(float(y)) - minY) * multY / 2
-            i.setCoordinates(int(x), int(y))
+            normX = (int(float(x)) - minX) * multX
+            normY = (int(float(y)) - minY) * multY
+            i.setCoordinates(int(normX), int(normY))
 
 
-def scaleCoordinates(sElements, scale):
-    for i in sElements:
+def scaleCoordinates(studentGraph, scale):
+    for i in studentGraph:
         if (type(i) == model.Edge):
             continue
         else:
