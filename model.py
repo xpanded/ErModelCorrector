@@ -1,4 +1,8 @@
 class Entity:
+    """
+    The Entity class represents an Entity in the ER model
+    nid represents the node id to distinguish each entity,relationship an attrobute each from another
+    """
 
     def __init__(self, nid, label, x, y):
         self.nid = nid
@@ -28,6 +32,10 @@ class Entity:
 
 
 class Relation:
+    """
+    The Relationship class represents a Relationship in the ER model
+    nid represents the node id to distinguish each entity,relationship an attrobute each from another
+    """
 
     def __init__(self, nid, label, x, y):
         self.nid = nid
@@ -64,6 +72,10 @@ class Relation:
 
 
 class Attribute:
+    """
+    The Attribute class represents an Attribute in the ER model
+    nid represents the node id to distinguish each entity,relationship an attrobute each from another
+    """
     def __init__(self, nid, label, primary, x, y):
         self.nid = nid
         self.label = label
@@ -162,6 +174,7 @@ def createEdge(x, list):
         slabels = res[i + 4].split('>')
         slabel = slabels[1]
         slabel = slabel.split('<')[0]
+        slabel = umlautHelper(slabel)
 
     source = findInList(ssource, list)
     target = findInList(starget, list)
@@ -206,6 +219,7 @@ def createEntity(nx, list):
         ngeo = res[i + 1].split('=')
         nlabel = nlabels[1]
         nlabel = nlabel.split('<')[0]
+        nlabel = umlautHelper(nlabel)
 
         x = ngeo[3][1:-3]
         y = ngeo[4][1:-4]
@@ -236,3 +250,13 @@ def createRelation(rid, rlabel, list, x, y):
 def createAttribute(nid, label, primary, list, x, y):
     attribute = Attribute(nid, label, primary, x, y)
     list.append(attribute)
+
+def umlautHelper(text):
+    text = text.replace("&#196;", "Ä")
+    text = text.replace("&#214;", "Ö")
+    text = text.replace("&#220;", "Ü")
+    text = text.replace("&#228;", "ä")
+    text = text.replace("&#252;", "ü")
+    text = text.replace("&#246;", "ö")
+
+    return text

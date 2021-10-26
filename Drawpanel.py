@@ -24,8 +24,6 @@ def openStudentFile():
 def correct(my_canvas, t, spinbox):
     t.delete(1.0, END)
     writer = []
-    print(Files[0])
-    print(Files[1])
     if Files[0] != 0 and Files[1] != 0:
         my_canvas.delete("all")
         sElements, cElements = myParser.parse(Files[1], Files[0], writer)
@@ -54,7 +52,7 @@ class Main(Frame):
         self.rowconfigure(3, weight=1)
         self.rowconfigure(5, pad=7)
 
-        lbl = Label(self, text="Name des Studenten")
+        lbl = Label(self, text="Please load the model solution before loading the student's model")
         lbl.grid(sticky=W, pady=4, padx=5)
 
         my_canvas = Canvas(self, width=1600, height=700, bg="white")
