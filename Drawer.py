@@ -1,4 +1,4 @@
-import model
+import Model
 
 
 def drawEntity(my_canvas, attribute):
@@ -47,13 +47,13 @@ def drawEdge(my_canvas, edge):
 
 def drawER(my_canvas, alElements):
     for i in reversed(alElements):
-        if (type(i) == model.Entity):
+        if (type(i) == Model.Entity):
             drawEntity(my_canvas, i)
-        elif (type(i) == model.Attribute):
+        elif (type(i) == Model.Attribute):
             drawAttribute(my_canvas, i)
-        elif (type(i) == model.Relation):
+        elif (type(i) == Model.Relation):
             drawRelation(my_canvas, i)
-        elif (type(i) == model.Edge):
+        elif (type(i) == Model.Edge):
             drawEdge(my_canvas, i)
 
 

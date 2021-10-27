@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 
-import model
+import Model
 import Corrector
 
 
@@ -22,9 +22,9 @@ def parse(xmlfile, correctfile, out):
         y = ET.tostring(x)
         y = str(y)
         if (sort == 'edge'):
-            model.createEdge(y, cElements)
+            Model.createEdge(y, cElements)
         if (sort == 'node'):
-            model.createEntity(y, cElements)
+            Model.createEntity(y, cElements)
 
     i = 0
     studentGraph = []
@@ -34,9 +34,9 @@ def parse(xmlfile, correctfile, out):
         y = ET.tostring(x)
         y = str(y)
         if (sort == 'edge'):
-            model.createEdge(y, studentGraph)
+            Model.createEdge(y, studentGraph)
         if (sort == 'node'):
-            model.createEntity(y, studentGraph)
+            Model.createEntity(y, studentGraph)
 
     return studentGraph, cElements
 
@@ -45,6 +45,7 @@ def correct(alElements, cElements, out):
     Corrector.checkEntities(alElements, cElements, out)
     Corrector.checkAttributes(alElements, cElements, out)
     Corrector.checkRelationCardinality(alElements, cElements, out)
+    Corrector.checkTernary(alElements, cElements,out)
 
 
 # Corrector.checkIsRelation(alElements, out)
@@ -56,7 +57,7 @@ def getMinMax(studentGraph):
     maxX = 0
     maxY = 0
     for i in studentGraph:
-        if (type(i) == model.Edge):
+        if (type(i) == Model.Edge):
             continue
         else:
             x, y = i.getCoordinates()
@@ -81,7 +82,7 @@ def normaliseCoordinates(studentGraph, minX, minY, maxX, maxY):
     multX = canvasWidth / maxX
     multY = canvasHeight / maxY
     for i in studentGraph:
-        if (type(i) == model.Edge):
+        if (type(i) == Model.Edge):
             continue
         else:
             x, y = i.getCoordinates()
@@ -92,7 +93,7 @@ def normaliseCoordinates(studentGraph, minX, minY, maxX, maxY):
 
 def scaleCoordinates(studentGraph, scale):
     for i in studentGraph:
-        if (type(i) == model.Edge):
+        if (type(i) == Model.Edge):
             continue
         else:
             x, y = i.getCoordinates()

@@ -76,6 +76,7 @@ class Attribute:
     The Attribute class represents an Attribute in the ER model
     nid represents the node id to distinguish each entity,relationship an attrobute each from another
     """
+
     def __init__(self, nid, label, primary, x, y):
         self.nid = nid
         self.label = label
@@ -251,10 +252,12 @@ def createAttribute(nid, label, primary, list, x, y):
     attribute = Attribute(nid, label, primary, x, y)
     list.append(attribute)
 
+
 def umlautHelper(text):
     text = text.replace("&#196;", "Ä")
     text = text.replace("&#214;", "Ö")
     text = text.replace("&#220;", "Ü")
+    text = text.replace("&#223;", "ß")
     text = text.replace("&#228;", "ä")
     text = text.replace("&#252;", "ü")
     text = text.replace("&#246;", "ö")
