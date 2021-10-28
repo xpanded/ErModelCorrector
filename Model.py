@@ -34,7 +34,7 @@ class Entity:
 class Relation:
     """
     The Relationship class represents a Relationship in the ER model
-    nid represents the node id to distinguish each entity,relationship an attrobute each from another
+    nid represents the node id to distinguish each entity,relationship an attribute each from another
     """
 
     def __init__(self, nid, label, x, y):
@@ -74,7 +74,7 @@ class Relation:
 class Attribute:
     """
     The Attribute class represents an Attribute in the ER model
-    nid represents the node id to distinguish each entity,relationship an attrobute each from another
+    nid represents the node id to distinguish each entity,relationship an attribute each from another
     """
 
     def __init__(self, nid, label, primary, x, y):
@@ -115,6 +115,9 @@ def findInList(nid, list):
 
 
 class Edge:
+    """
+    the edge represents the line between the entities,relations and attributes
+    """
 
     def __init__(self, lid, source, target):
         self.lid = lid
@@ -156,8 +159,15 @@ class Edge:
         return self.arrowTarget
 
 
-def createEdge(x, list):
-    res = x.split('\\n')
+def createEdge(lines, list):
+    """
+    The lines are getting split and parsed to gather the required information.
+    a Edge with the data of lines is getting created. The list is appended by this edge
+
+    :param lines: a string from the graphml file for this edge
+    :param list: a list of the graph which contains all objects of this graph
+    """
+    res = lines.split('\\n')
     mains = res[0].split(' ')
     sid = mains[3]
     sid = sid[4:-1]
@@ -204,8 +214,15 @@ def createEdge(x, list):
     list.append(nline)
 
 
-def createEntity(nx, list):
-    res = nx.split('\\n')
+def createEntity(lines, list):
+    """
+    The lines are getting split and parsed to gather the required information.
+    a Entity/relation/attribute with the data of lines is getting created. The list is appended by this object
+
+    :param lines: a string from the graphml file for this edge
+    :param list: a list of the graph which contains all objects of this graph
+    """
+    res = lines.split('\\n')
     mains = res[0].split(' ')
     nid = mains[3]
     nid = nid[4:-2]
@@ -244,16 +261,20 @@ def createEntity(nx, list):
 
 
 def createRelation(rid, rlabel, list, x, y):
+    """creates a Relation with the given parameter"""
     relation = Relation(rid, rlabel, x, y)
     list.append(relation)
 
 
 def createAttribute(nid, label, primary, list, x, y):
+    """creates a Attribute with the given parameter"""
     attribute = Attribute(nid, label, primary, x, y)
     list.append(attribute)
 
 
 def umlautHelper(text):
+    """ the xml parser we use can not read umlaute therefore he replace them with html code
+    in this method we reserve this process"""
     text = text.replace("&#196;", "Ä")
     text = text.replace("&#214;", "Ö")
     text = text.replace("&#220;", "Ü")

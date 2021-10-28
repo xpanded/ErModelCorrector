@@ -10,13 +10,13 @@ scale = 1
 
 
 def openCorrectFile():
-    file = askopenfilename(title='Choose GraphML', filetype=[("GraphML File", "*.graphml")])
+    file = askopenfilename(title='Choose GraphML')
     if file:
         Files.insert(0, file)
 
 
 def openStudentFile():
-    file = askopenfilename(title='Choose GraphML', filetype=[("GraphML File", "*.graphml")])
+    file = askopenfilename(title='Choose GraphML')
     if file:
         Files.insert(1, file)
 
@@ -26,7 +26,7 @@ def correct(my_canvas, t, spinbox):
     writer = []
     if Files[0] != 0 and Files[1] != 0:
         my_canvas.delete("all")
-        sElements, cElements = myParser.parse(Files[1], Files[0], writer)
+        sElements, cElements = myParser.parse(Files[1], Files[0])
         myParser.correct(sElements, cElements, writer)
         minX, minY, maxX, maxY = myParser.getMinMax(sElements)
         myParser.normaliseCoordinates(sElements, minX, minY, maxX, maxY)

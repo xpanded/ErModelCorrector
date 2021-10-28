@@ -4,31 +4,40 @@ import Model
 import Corrector
 
 
-def parse(xmlfile, correctfile, out):
-    ns = {"y": "https://www.yworks.com/xml/graphml", "gr": "http://graphml.graphdrawing.org/xmlns"}
+def parse(studentfile, modelFile):
+    """
+    the namespaces need to be need to be defined if the file has got prefixes like our graphml file has.
+    we parse the tree and got thorugh every element of a graph and save this in a list for each file.
+    depending if it is a edge or an entity(entity,edge,relation), we call the corresponding method
+
+    :param studentfile:  is the xml file that contains the student's graph
+    :param modelFile:  is the xml file that contains the model's graph
+    :return: 2 lists one for each graph containing every object of their graph
+    """
+    namespace = {"y": "https://www.yworks.com/xml/graphml", "gr": "http://graphml.graphdrawing.org/xmlns"}
     ET.register_namespace('gr', 'http://graphml.graphdrawing.org/xmlns')
     ET.register_namespace('y', 'https://www.yworks.com/xml/graphml')
 
-    tree = ET.parse(xmlfile)
+    tree = ET.parse(studentfile)
     root = tree.getroot()
 
-    ctree = ET.parse(correctfile)
+    ctree = ET.parse(modelFile)
     croot = ctree.getroot()
 
-    cElements = []
-    for x in croot.findall('./gr:graph/', ns):
+    modelElements = []
+    for x in croot.findall('./gr:graph/', namespace):
         text = x.tag.__str__()
         sort = text[39:]  # 39 for the prefix adress
         y = ET.tostring(x)
         y = str(y)
         if (sort == 'edge'):
-            Model.createEdge(y, cElements)
+            Model.createEdge(y, modelElements)
         if (sort == 'node'):
-            Model.createEntity(y, cElements)
+            Model.createEntity(y, modelElements)
 
     i = 0
     studentGraph = []
-    for x in root.findall('./gr:graph/', ns):
+    for x in root.findall('./gr:graph/', namespace):
         text = x.tag.__str__()
         sort = text[39:]  # 39 for the prefix adress
         y = ET.tostring(x)
@@ -38,20 +47,31 @@ def parse(xmlfile, correctfile, out):
         if (sort == 'node'):
             Model.createEntity(y, studentGraph)
 
-    return studentGraph, cElements
+    return studentGraph, modelElements
 
 
-def correct(alElements, cElements, out):
-    Corrector.checkEntities(alElements, cElements, out)
-    Corrector.checkAttributes(alElements, cElements, out)
-    Corrector.checkRelationCardinality(alElements, cElements, out)
-    Corrector.checkTernary(alElements, cElements,out)
+def correct(studentElements, modelElements, out):
+    """
 
-
-# Corrector.checkIsRelation(alElements, out)
+    :param studentElements: list of all elements included in the student's file
+    :param modelElements: list of all elements included in the model file
+    :param out = outputfile with all potential errors
+    :return no
+    """
+    Corrector.checkEntities(studentElements, modelElements, out)
+    Corrector.checkAttributes(studentElements, modelElements, out)
+    Corrector.checkRelationCardinality(studentElements, modelElements, out)
+    Corrector.checkTernary(studentElements, modelElements, out)
 
 
 def getMinMax(studentGraph):
+    """
+    The method looks for the minimum and max coordinates in the given list
+
+    :param studentGraph: list of all elements included in the student's file
+    :return: minimum x and y , maximum x and y
+    """
+
     minX = 0
     minY = 0
     maxX = 0
@@ -73,8 +93,19 @@ def getMinMax(studentGraph):
 
 
 def normaliseCoordinates(studentGraph, minX, minY, maxX, maxY):
-    canvasWidth = 1540/1.2
-    canvasHeight = 680/1.2
+    """
+    The method checks if any of the both min values are negative to calculate the propper maximal values
+    then the multiplicators for x and y are getting calculated.
+    Then every entity(entity,edge,relation) coordinates are gewtting calculated in the coordinate system
+
+    :param studentGraph: list of all elements included in the student's file
+    :param minX: minimal value for x
+    :param minY: minimal value for y
+    :param maxX: maximal value for x
+    :param maxY: maximal value for y
+    """
+    canvasWidth = 1540 / 1.2
+    canvasHeight = 680 / 1.2
     if (minX < 0):
         maxX = abs(minX) + abs(maxX)
     if (minY < 0):
@@ -92,6 +123,12 @@ def normaliseCoordinates(studentGraph, minX, minY, maxX, maxY):
 
 
 def scaleCoordinates(studentGraph, scale):
+    """
+
+    :param studentGraph: list of all elements included in the student's file
+    :param scale: a percentage value with wihich the coordinates are getting scaled like 100% = 1
+    """
+
     for i in studentGraph:
         if (type(i) == Model.Edge):
             continue
