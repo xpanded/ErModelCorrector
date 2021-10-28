@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 import Model
 import Corrector
 
+"""This class is responsible for the parsing"""
 
 def parse(studentfile, modelFile):
     """

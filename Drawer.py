@@ -80,18 +80,18 @@ def helperArrow(my_canvas, edge, target):
         my_canvas.create_line(xm + 20, ym + 20, x2 + 20, y2 + 20, fill=edge.getColor(), arrow='first')
     else:
         if (x1 > x2):
-            while (calculateDisctance(x2, y2, xm, ym) < 50):
+            while (calculateDistance(x2, y2, xm, ym) < 50):
                 xm = xm * 1.001
                 ym = m * xm + p
             my_canvas.create_line(xm + 20, ym + 20, x2 + 20, y2 + 20, fill=edge.getColor(), arrow='first')
         else:
-            while (calculateDisctance(x2, y2, xm, ym) < 50):
+            while (calculateDistance(x2, y2, xm, ym) < 50):
                 xm = xm * 0.999
                 ym = m * xm + p
             my_canvas.create_line(xm + 20, ym + 20, x2 + 20, y2 + 20, fill=edge.getColor(), arrow='first')
 
 
-def calculateDisctance(x, y, x2, y2):
+def calculateDistance(x, y, x2, y2):
     helper = pow((x - x2), 2) + pow((y - y2), 2)
     distance = pow(helper, 0.5)
     return distance
